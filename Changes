@@ -1,0 +1,794 @@
+                              Muldis::Rosetta
+---------------------------------------------------------------------------
+
+2008-04-12   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis Rosetta version 0.7.0 for Perl 5 is released on CPAN as
+    Muldis-Rosetta-0.7.0.tar.gz.  Muldis Rosetta version 0.7.0 for Perl 6
+    is not released at all.  The rest of this Changes entry refers only to
+    the Perl 5 version, but it also happens that the Perl 6 version was
+    also brought fully up to date along with it.
+
+    * What was Muldis-DB at version 0.6.2 has been renamed to
+    Muldis-Rosetta.  This is the first release of the Muldis-Rosetta
+    distribution, and the first release of any distribution to contain Perl
+    5 package names like Muldis::Rosetta(|::\w+).  All of the files in this
+    distribution are as identical as possible to how they were when last
+    released under the names Muldis::DB(|::\w+) but for the name changes.
+    All lib/ files were renamed appropriately, and also the 2
+    t/Muldis_DB_\w+ were renamed to t/Muldis_Rosetta_\w+.
+
+    * All versioned files had their version numbers incremented to the
+    first higher 0.N.0.  New file versions are: Rosetta.pm and Interface.pm
+    and Validator.pm and Example.pm 0.7.0 and SeeAlso.pod 0.5.0.
+
+    * (Rosetta.pm)  The TRADEMARK POLICY section was severely edited to
+    excise most legalese, and is now just half its previous size; the old
+    longer version was shunted off to the Muldis Data Systems' website.
+
+    * (Interface.pm, Validator.pm)  Update to retain compatibility with the
+    official Muldis D version 0.25.0, where the second (authority) part of
+    a fully-qualified Muldis D language name has changed from
+    'cpan:DUNCAND' to 'http://muldis.com'.
+
+    * (SeeAlso.pod)  A few minor updates.
+
+    * Minor update to the file archives/OSCON2008SessionProposal.txt which
+    reflects that the proposal was accepted; the talk will be given Jul 23.
+    Also retconned the file to use current names, urls of Muldis D|Rosetta;
+    the copy on the OSCON website will likewise be updated if possible.
+
+    * This is the Muldis-Rosetta-0.7.0 file manifest:
+
+        archives/OSCON2005LightningTalk.txt
+        archives/OSCON2006SessionProposal.txt
+        archives/OSCON2008SessionProposal.txt
+        Changes
+        INSTALL
+        lib/Muldis/Rosetta.pm
+        lib/Muldis/Rosetta/Engine/Example.pm
+        lib/Muldis/Rosetta/Interface.pm
+        lib/Muldis/Rosetta/SeeAlso.pod
+        lib/Muldis/Rosetta/Validator.pm
+        LICENSE/GPL
+        LICENSE/LGPL
+        Makefile.PL
+        MANIFEST
+        MANIFEST.SKIP
+        META.yml
+        README
+        t/Muldis_Rosetta_00_Compile.t
+        t/Muldis_Rosetta_50_Validate_Example.t
+        TODO
+
+2008-04-11   Darren Duncan <perl@DarrenDuncan.net>
+
+    The next version of the Module List will list the following module:
+
+      modid:       Muldis::Rosetta
+      DSLIP:       cmpOl
+      description: Full-featured truly relational DBMS in Perl
+      userid:      DUNCAND (Darren Duncan)
+      chapterid:   7 (Database_Interfaces)
+      enteredby:   SMUELLER (Steffen Müller)
+      enteredon:   Fri Apr 11 07:37:39 2008 GMT
+
+    The resulting entry will be:
+
+    Muldis::
+    ::Rosetta    cmpOl Full-featured truly relational DBMS in Perl  DUNCAND
+
+2008-04-10   Darren Duncan <perl@DarrenDuncan.net>
+
+    Record update in the PAUSE modules database:
+
+           modid: [Muldis::DB]
+           statd: [c]
+           stats: [m]
+           statl: [p]
+           stati: [O]
+           statp: [l]
+     description: [Full-featured truly relational DBMS in Perl]
+          userid: [DUNCAND]
+       chapterid: [7]
+        mlstatus: [delete] was [list]
+
+2008-03-23   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis DB version 0.6.2 for Perl 5 is released on CPAN as
+    Muldis-DB-0.6.2.tar.gz.  Muldis DB version 0.6.2 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version, and it should not be assumed that the Perl 6 version
+    incorporates all of said updates, though it may have some of them.
+
+    * Renamed the 2 t/MDB_\w+ test files to t/Muldis_DB_\w+.
+
+    * New file versions are: DB.pm and Interface.pm and Validator.pm and
+    Example.pm 0.6.2 and SeeAlso.pod 0.4.4.
+
+    * Updated DB.pm and the README file to clarify that commercial support
+    is available from the author specifically by way of Muldis Data
+    Systems.
+
+    * Updated all .pm and .pod files to add a new TRADEMARK POLICY section
+    near the end of each; it serves for trademarks what the LICENSE AND
+    COPYRIGHT did for copyrights.  The DB.pm file had the actual text, and
+    the other files simply say to look at DB.pm.  To summarize, the word
+    MULDIS is a trademark and how you may use it has limitations.
+
+    * (DB.pm, Interface.pm, Validator.pm, SeeAlso.pod)  A few minor updates
+    to reflect the fact that, for one thing, the Muldis D official spec is
+    now released under the Perl main package namespace Muldis::D rather
+    than Language::MuldisD, and for another thing, some small aspects of
+    Muldis DB's reflection of the Muldis D language were out of date, but
+    now they were updated to resync.
+
+2008-03-10   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis DB version 0.6.1 for Perl 5 is released on CPAN as
+    Muldis-DB-0.6.1.tar.gz.  Muldis DB version 0.6.1 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version, and it should not be assumed that the Perl 6 version
+    incorporates all of said updates, though it may have some of them.
+
+    * New file versions are: DB.pm and Interface.pm and Validator.pm and
+    Example.pm 0.6.1 and SeeAlso.pod 0.4.3.
+
+    * Updated the README file to emphasize the Perl 5 version for now.
+
+    * (SeeAlso.pod)  A few minor updates.
+
+    * Incremented all copyright year range-ends to 2008.
+
+    * Added new file archives/OSCON2008SessionProposal.txt which is a copy
+    of a proposal to give a talk on Muldis D + DB at OSCON 2008 (it can
+    also be given elsewhere); this is likely the most succinct description
+    yet of what the projects are and why one would want to use them.
+
+2008-03-10   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis DB for Perl 6 has suspended development temporarily while
+    resources are focused on just Muldis DB for Perl 5 in the short term;
+    later on, when the Perl 5 version is sufficiently advanced, it will be
+    translated to Perl 6, so to restart parallel development, or at least
+    to provide a snapshot.  In the meantime, some updates to the Perl 6
+    version may still be made, but it should not be interpreted that these
+    are keeping the whole project in feature parity with the Perl 5 one.
+
+2007-12-09   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis DB version 0.6.0 for Perl 5 is released on CPAN as
+    Muldis-DB-0.6.0.tar.gz.  Muldis DB version 0.6.0 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version.
+
+    * As of this release, the in-code $VERSION declarations of all Perl 5
+    packages in this distribution are changed to match the X.Y.Z format
+    that the same packages' own VERSION POD had all along (the old in-code
+    format was X.00Y00Z).  A consequence of this change is that this
+    distribution has gained an external dependency on the Perl 5 module
+    'version', which is not bundled with Perl 5.8.x; however, it *is*
+    bundled with Perl 5.10.x, so if you are using that newer Perl, you
+    won't have to install 'version' separately from CPAN.
+
+    * New file versions are: DB.pm and Interface.pm and Validator.pm and
+    Example.pm 0.6.0 and SeeAlso.pm 0.4.2.
+
+    * (Interface.pm, Example.pm, Validator.pm, DB.pm, SeeAlso.pod,
+    MDB_50_Validate_Example.t)  Renamed all Perl packages named ::DBMS to
+    ::Machine (that is, under Interface:: and Example::Public::), and
+    similarly renamed all routines, attributes, parameters, variables,
+    config keys, and so on, to use 'machine' rather than 'dbms'.
+
+    * (Interface.pm, Example.pm, Validator.pm)  Split the Machine
+    role|class into itself and the new Process role|class; a Machine now
+    has 0..N Process, and a Process now has 0..N
+    Var|FuncBinding|ProcBinding.  The Machine constructor retained all of
+    its parameters, and the Process constructor has no configuration
+    parameters; nearly all of the Machine methods went to Process.  As part
+    of the split, 2 methods were added to Machine, and 1 to Process.
+
+2007-10-20   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis DB version 0.5.0 for Perl 5 is released on CPAN as
+    Muldis-DB-0.5.0.tar.gz.  Muldis DB version 0.5.0 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version.
+
+    * Removed the files PhysType.pm and Operators.pm; these files were very
+    out of date and will be replaced later (possibly under the same names).
+
+    * New file versions are: DB.pm and Interface.pm and Validator.pm and
+    Example.pm 0.5.0 and SeeAlso.pm 0.4.1.
+
+    * (Interface.pm, Example.pm, Validator.pm)  Added a new attribute to
+    the DBMS role (and Example's doing class), "expected AST language",
+    with which Muldis DB users explicitly declare what Muldis DB (or
+    alternative) language version they expect to use for further
+    interaction with that DBMS.  The new_dbms constructor function gains a
+    parameter ('exp_ast_lang') for setting its default value, and the DBMS
+    role gains 2 methods for fetching/updating that attribute.  Note that,
+    unlike the engine_name and dbms_config parameters, exp_ast_lang is
+    generally not suited to read from a config file, as it is meant to
+    correspond to program code rather than a user's runtime setting.  The
+    &main of Validator.pm was updated to provide a hard-coded argument for
+    exp_ast_lang, which will be maintained in future releases at the latest
+    official Muldis D version number known to work at the time.
+
+    * (DB.pm)  Some small DESCRIPTION pod updates.
+
+    * (SeeAlso.pod)  Added more prospective extension modules.
+
+    * Fleshed out the tail of this Changes file with a summary pre-release
+    (rel. 2007 June) history of Muldis DB; going from mid-2002 to mid-2007.
+
+2007-09-22   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis DB version 0.4.0 for Perl 5 is released on CPAN as
+    Muldis-DB-0.4.0.tar.gz.  Muldis DB version 0.4.0 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version.
+
+    * This release is a snapshot to show a particular mid-way point in a
+    large sequence of changes.  To summarize, the public API of Muldis DB
+    has been rewritten, documentation for that API was added (including an
+    example), and both the Example Engine and the Validator suite were
+    (substantially) updated to conform to the new API.  However, the
+    Example Engine is still incapable of executing any tasks, so that
+    aspect is unchanged from before.  The next release should flesh out
+    Example so that it executes some tasks.
+
+    * Removed the file Literal.pm; Muldis DB now uses Perl Hosted Abstract
+    Muldis D (composed of Perl array refs, hash refs, scalars), as
+    described in Language::MuldisD::PerlHosted, rather than Literal
+    objects, as its data|code interchange format.  This makes things a lot
+    simpler, easier to use, and better performing.  All of the other .pm
+    files in this distribution, which used Literal.pm, were updated
+    accordingly, which is further described below.  Also removed the
+    t/MDB_10_Literal_Simple.t test file.
+
+    * All versioned files had their version numbers brought up to 0.4.0.
+
+    * Minor updates to all versioned files such that most references to the
+    project name were changed to "Muldis DB" from "Muldis::DB".
+
+    * (DB.pm, Interface.pm, Example.pm)  Updates to various
+    main/introductory documentation.  Half rewrote/prepended the
+    DESCRIPTION of DB.pm.  Added a small initial DESCRIPTION to each of
+    Interface.pm, Example.pm.  Further minor edits to other sections.
+
+    * (Interface.pm)  Rewrote 90% of the code to provide a substantially
+    different, though similar, API.  The new_dbms function of the
+    Muldis::DB::Interface module now has a modified version of what code
+    used to be in the constructor submethod of ::DBMS (it is the code that
+    loads an Engine and invokes it to make a ::DBMS object), rather than
+    the former being an optional wrapper for the latter.  All remaining
+    ::Interface::\w+ named packages of Interface.pm are now just roles that
+    declare method interfaces but don't implement any, and the
+    correspondingly named Engine classes must inherit said roles and
+    implement the methods; they are no longer wrapper classes that do
+    validation on behalf of, and then invoke, the Engines, but rather the
+    Engines must do their own input validation now, and user applications
+    are now invoking the public Engine classes directly.  The
+    ::Engine::Role(|::\w+) roles that used to be in Interface.pm are now
+    gone, as they are now redundant; the new ::Interface::\w+ are like what
+    they used to be.  The new Interface.pm do not declare constructor
+    interfaces, since users should now only be making objects indirectly by
+    way of methods of another class.  The ::HostGateVar class/role was
+    renamed to ::Var, the ::HostGateRtn was renamed to ::ProcBinding, and a
+    similar ::FuncBinding was added.  The ::(DBMS|Var|(Func|Proc)Binding)
+    roles were further substantially altered, with some methods renamed and
+    others added.  Perhaps the most substantial difference of the new API
+    for actual functionality is that there is no distinct "prepare" method
+    any more, rather all action methods are of the "execute" (now called
+    "call") variety.  How this works is you first call() a DDL routine, its
+    argument being the definition of the (now always named) user-defined
+    routine you want to compile; then you call() that newly created
+    routine.  In a related fashion, if you just want to invoke existing
+    system or (already loaded / in-mounted-database) user-defined routines,
+    you can just call() them like they were Perl routines, with no separate
+    DDL/prepare step.  The (Func|Proc)Binding roles aren't actually needed
+    for anything, as the DBMS role provides call_(func|proc) methods, which
+    in either case just alias to an already compiled routine, but the 2
+    Binding roles are provided for now in case they may add some efficiency
+    due to less repeated input validation or such.
+
+    * (Interface.pm)  Rewrote and/or added 90% of the INTERFACE pod; unlike
+    the old API which had practically no documentation, the new API is
+    fully documented.  Also added an initial SYNOPSIS documentation block,
+    which illustrates invoking the system-defined relational join operator,
+    where the arguments and result are Perl-lexical variables; this is the
+    first actual example code for using Muldis DB, however contrived.
+
+    * (Example.pm)  Rewrote the Example.pm code to conform to the changed
+    API declared by Interface.pm.  The new version implements the root
+    module, the ::DBMS and ::Var classes, but not the ::(Func|Proc)Binding
+    classes.  Also, the interface-role implementing classes were all
+    renamed aside from interface-conformity, specifically "::Public" was
+    added to all their names, that signifying that these are the only
+    classes that applications would directly invoke.  This file stands to
+    be substantially updated in the next releases, but for the most part
+    most Example code will be put in other files, with Example.pm limited
+    to providing just the public interface.
+
+    * (PhysType.pm, Operators.pm)  Made a minimal set of updates to these
+    files to bring them up to date with the current Muldis D type or
+    routine names for what they implement, and to remove any references to
+    Literal.pm.  These files stand to be substantially updated, or even
+    replaced in the next releases.
+
+    * (Validator.pm)  Rewrote the foods/suppliers/shipments scenario, which
+    is basically all the code, so it uses the new API in Interface.pm; this
+    version is barely half the code size of the old one, but it doesn't
+    create a user-defined routine to combine the tasks to be done; an
+    additional version will be provided in a subsequent release that does.
+    The SYNOPSIS, plus the MDB_50_Validate_Example.t, were minor updated.
+
+    * (Validator.pm)  Added a &does_ok to Validator.pm, which in the Perl 6
+    Validator.pm is a modified copy of the &isa_ok of Test.pm but it tests
+    with .does rather than .isa; in the Perl 5 Validator.pm, the new
+    &does_ok is just a symbolic alias for the Test::More &isa_ok; in any
+    event, the rest of both versions of Validator.pm now invokes &does_ok
+    rather than &isa_ok, to keep their code bases more similar.
+
+    * (SeeAlso.pod)  Updated the PROSPECTIVE MULDIS DB EXTENSIONS section
+    mainly to bring various names, terminology, and references up to date
+    with design changes.  Any package names containing "Literal" now have
+    "PHMD" instead, and any docs refering to "Muldis DB AST nodes" now
+    refer to "Perl Hosted Muldis D".  Re-added the
+    Muldis::DB::AST::StringRepr module that was removed in release 0.1.0
+    under the new name Muldis::DB::PHMD::Translate::ConcreteMuldisD (it's
+    not part of Literal.pm anymore).  Other small renames and changes.
+
+    * Updated the TODO file.
+
+2007-09-14   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis DB version 0.3.2 for Perl 5 is released on CPAN as
+    Muldis-DB-0.3.2.tar.gz.  Muldis DB version 0.3.2 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version.
+
+    * Removed the file Copying.pod; it isn't particularly useful anymore.
+
+    * New file versions are: DB.pm 0.3.2.  The other pre-existing versioned
+    files are unchanged.
+
+    * (DB.pm)  The whole Muldis DB core, that is, all code in this
+    distribution, has been re-licensed under the GNU Lesser General Public
+    License version 3 or later (LGPLv3+).  Also, the current plan is that
+    the LGPLv3+ will be used as the license of many separately distributed
+    Muldis DB extensions started by the same author, such as some
+    implementations over SQL databases, or such as example code in
+    tutorials/cookbooks; or some extensions would be under other
+    GPLv3-compatible licenses.
+
+2007-08-18   Darren Duncan <perl@DarrenDuncan.net>
+
+    Record update in the PAUSE modules database:
+
+           modid: [Muldis::DB]
+           statd: [c]
+           stats: [m]
+           statl: [p]
+           stati: [O]
+           statp: [l] was [g]
+     description: [Full-featured truly relational DBMS in Perl]
+          userid: [DUNCAND]
+       chapterid: [7]
+        mlstatus: [list]
+
+2007-08-18   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis DB version 0.3.1 for Perl 5 is released on CPAN as
+    Muldis-DB-0.3.1.tar.gz.  Muldis DB version 0.3.1 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version.
+
+    * Renamed DB.pod to DB.pm, and added an empty dummy package declaration
+    of Muldis::DB to it, all for the sole purpose of helping the CPAN
+    indexer link to this distribution properly; it doesn't work when the
+    namespace file is plain pod.  For similar reasons, the version number
+    of DB.pm will now always be kept in sync with the whole-distribution
+    version number declared in the Makefile.PL.
+
+    * New file versions are: DB.pm and Copying.pod 0.3.1.  The other
+    pre-existing versioned files are unchanged.
+
+    * (DB.pm, Copying.pod)  The license of Muldis DB has been simplified
+    to no longer be the duality of the GPL and Affero GPL, as the Affero
+    GPL option is dropped; this is because the Affero option didn't seem to
+    provide any clear benefit, and the GPL is regardless compatible with
+    the Affero GPL with respect to combining works into larger works, which
+    is all that is truly important.
+
+    * (DB.pm, Copying.pod)  The file DB.pm has been re-licensed under the
+    Lesser GPL, while the rest of this distribution remains under the GPL.
+    While not immediately the case (due to technicalities), in the near
+    future, that will mean that the LGPL will cover all mandatory
+    components (a minority), and the GPL all or most optional components of
+    the Muldis DB framework.  Accordingly, the file LICENSE/LGPL was added
+    to this distro, which contains the text of the LGPL version 3.0.
+
+2007-07-24   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis::DB version 0.3.0 for Perl 5 is released on CPAN as
+    Muldis-DB-0.3.0.tar.gz.  Muldis::DB version 0.3.0 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version.
+
+    * What was Muldis-DB at version 0.2.0 and earlier, has been split in 2,
+    with the parts to be Language-MuldisD and Muldis-DB, each at version
+    0.3.0 and later.  Prior to the split, both the Perl 5 and Perl 6
+    versions of Muldis-DB contained identical copies of what became
+    Language-MuldisD; after the split, neither Muldis-D had a copy.
+
+    * All versioned files had their version numbers brought up to 0.3.0.
+
+    * This release saw no code changes at all.  About half of SeeAlso.pod
+    was stripped out, since that stayed only with Language-MuldisD.
+
+    * This is the Muldis-DB-0.3.0 file manifest:
+
+        archives/OSCON2005LightningTalk.txt
+        archives/OSCON2006SessionProposal.txt
+        Changes
+        INSTALL
+        lib/Muldis/DB.pod
+        lib/Muldis/DB/Copying.pod
+        lib/Muldis/DB/Engine/Example.pm
+        lib/Muldis/DB/Engine/Example/Operators.pm
+        lib/Muldis/DB/Engine/Example/PhysType.pm
+        lib/Muldis/DB/Interface.pm
+        lib/Muldis/DB/Literal.pm
+        lib/Muldis/DB/SeeAlso.pod
+        lib/Muldis/DB/Validator.pm
+        LICENSE/GPL
+        Makefile.PL
+        MANIFEST
+        MANIFEST.SKIP
+        META.yml
+        README
+        t/MDB_00_Compile.t
+        t/MDB_10_Literal_Simple.t
+        t/MDB_50_Validate_Example.t
+        TODO
+
+2007-07-20   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis::DB version 0.2.0 for Perl 5 is released on CPAN as
+    Muldis-DB-0.2.0.tar.gz.  Muldis::DB version 0.2.0 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version, specifically the portions that were not split-off into
+    Language-MuldisD following release 0.2.0.
+
+    * Renamed AST.pm to Literal.pm, and split up DB.pm into DB.pod and
+    Interface.pm.  Any code that used to be spelled Muldis::DB::AST or
+    Muldis::DB is now spelled Muldis::DB::Literal and
+    Muldis::DB::Interface.  Following these changes, lib/Muldis/DB.pod is
+    still the "main" file for documentation purposes, but for code
+    purposes, both Literal.pm and Interface.pm are now used directly.
+
+    * New file versions are: DB.pod and Literal.pm and Interface.pm and
+    Language.pod and Validator.pm and Example.pm 0.2.0.
+
+    * Updated Literal.pm to remove all exported functions that trivially
+    wrap an object constructor, updated any uses in other files to call
+    constructors directly.  Also renamed ::(Bool|Order|Int|Blob|Text)Lit to
+    remove the "Lit", and ::(|Quasi)(Tuple|Relation)Sel to remove the
+    "Sel", and likewise updated any refs to said.
+
+    * In both Literal.pm and PhysType.pm, renamed any classes named
+    (TypeInvo|TypeDict|ExprDict|ValueDict)(|NQ|AQ) to (_\1|\1|Quasi\1)
+    respectively, and refs to said.
+
+2007-07-11   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis::DB version 0.1.0 for Perl 5 is released on CPAN as
+    Muldis-DB-0.1.0.tar.gz.  Muldis::DB version 0.1.0 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version, specifically the portions that were not split-off into
+    Language-MuldisD following release 0.2.0.
+
+    * This is a major release that focuses on overhauling or defining part
+    of the Muldis D meta-model / system catalog, which is essential for
+    supporting any user-defined DBMS entities, that is, for doing anything
+    remotely useful.  Said overhaul is expected to be staged over 3-4
+    consecutive releases, of which the current one is essentially just
+    updating documentation; not much code was changed by this release.
+
+    * New code file versions are: DB.pm and AST.pm and Validator.pm and
+    Example.pm 0.1.0.
+
+    * As of this release, all pod-only files now also have version numbers,
+    shown in the VERSION docs by NAME, like code-containing modules do; the
+    initial version numbers are all 0.1.0.
+
+    * Muldis D now has 2 representation formats (Concrete Muldis D,
+    Abstract Muldis D) rather than 3 (relations, ASTs, strings).
+
+    * Updated SeeAlso.pod to remove the proposal for a separately
+    distributed Muldis::DB::AST::StringRepr module; instead,
+    Muldis::DB::AST will parse and generate Concrete Muldis D by itself.
+
+    * Rearranged any relevant docs and code so that the most important core
+    scalar types are now in the order [Bool, Int, Blob, Text] and the
+    relation type factory Maybe now appears after Set.
+
+    * Muldis D now has a new scalar data type, "Order", which is an
+    enumeration (like "Bool" is) of 3 values: [Increase, Same, Decrease];
+    it is the result type of any binary comparison operator that underlies
+    the likes of less|greater-than or min|max or sorting operations.  Both
+    AST.pm and PhysType.pm were updated to include this type.
+
+2007-06-29   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis::DB version 0.0.1 for Perl 5 is released on CPAN as
+    Muldis-DB-0.0.1.tar.gz.  Muldis::DB version 0.0.1 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version, specifically the portions that were not split-off into
+    Language-MuldisD following release 0.2.0.
+
+    * New code file versions are: DB.pm and AST.pm and Validator.pm and
+    Example.pm 0.0.1.
+
+    * The primary purpose of this release is to re-license Muldis::DB under
+    actual free software licenses, specifically version 3 of the GPL family
+    of licenses, which the Free Software Foundation formally published on
+    2007 June 29th.  By contrast, the previous Muldis::DB releases were
+    under an expiring proprietary license, with just the promise of a free
+    re-license to come.  Accordingly, the file LICENSE/GPL was added to
+    this distro, which contains the text of the GPL version 3.0.
+
+    * This release also includes a collection of small documentation
+    updates and fixes, such as the following:  We now use the official
+    typography for the names 'TTM' and 'D' and such.  Added a DOCUMENTATION
+    READING ORDER section to the README file.  Added the 2007 June 4th
+    Muldis::DB namespace registration (to the official CPAN module list)
+    notice to the Changes file.  Updated parts of DB.pm and Copying.pod
+    concerning licensing matters.  This release has no code changes.
+
+2007-06-20   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis::DB version 0.0.0 for Perl 5 is released on CPAN as
+    Muldis-DB-0.0.0.tar.gz.  Muldis::DB version 0.0.0 for Perl 6 is not
+    released at all.  The rest of this Changes entry refers only to the
+    Perl 5 version, specifically the portions that were not split-off into
+    Language-MuldisD following release 0.2.0.
+
+    * This is the first release of the Perl 5 Muldis-DB distribution, and
+    the first release of any distribution to contain Perl 5 modules named
+    Muldis::DB::\w+.
+
+    * This is the initial file manifest:
+
+        archives/OSCON2005LightningTalk.txt
+        archives/OSCON2006SessionProposal.txt
+        Changes
+        INSTALL
+        lib/Muldis/DB.pm
+        lib/Muldis/DB/AST.pm
+        lib/Muldis/DB/Copying.pod
+        lib/Muldis/DB/Engine/Example.pm
+        lib/Muldis/DB/Engine/Example/Operators.pm
+        lib/Muldis/DB/Engine/Example/PhysType.pm
+        lib/Muldis/DB/Language.pod
+        lib/Muldis/DB/SeeAlso.pod
+        lib/Muldis/DB/Validator.pm
+        Makefile.PL
+        MANIFEST
+        MANIFEST.SKIP
+        META.yml
+        README
+        t/MDB_00_Compile.t
+        t/MDB_10_AST_Literals.t
+        t/MDB_50_Validate_Example.t
+        TODO
+
+    * Initial code file versions are: DB.pm and AST.pm and Validator.pm and
+    Example.pm and PhysType.pm and Operators.pm 0.0.0.
+
+    * As of this release, Muldis-DB is officially in pre-alpha development
+    status.  A lot of documentation and functionality is present, but a lot
+    isn't.  What is mostly done is the higher level documentation plus an
+    alpha-quality but fundamentally stable public API implementation.  What
+    is mostly undone is the reference engine implementation, the test
+    suite, and documentation of the API details.  What is already present
+    should be sufficient to begin study of Muldis-DB such that it can
+    actually be put to use within the next few weeks or months as Muldis-DB
+    is fleshed out.  Also, it should be possible now to start writing code
+    that uses or extends it.
+
+2007-06-04   Darren Duncan <perl@DarrenDuncan.net>
+
+    The next version of the Module List will list the following module:
+
+      modid:       Muldis::DB
+      DSLIP:       cmpOg
+      description: Full-featured truly relational DBMS in Perl
+      userid:      DUNCAND (Darren Duncan)
+      chapterid:   7 (Database_Interfaces)
+      enteredby:   ADAMK (Adam Kennedy)
+      enteredon:   Tue Jun  5 01:20:11 2007 GMT
+
+    The resulting entry will be:
+
+    Muldis::
+    ::DB         cmpOg Full-featured truly relational DBMS in Perl  DUNCAND
+
+2006-09-15 thru 2007-06-02
+
+    * Started rewriting Rosetta again, but with a name change, since
+    "Rosetta" was no longer appropriate for various reasons.  This rewrite
+    took the intentionally bad and temporary name QDRDBMS, to be renamed
+    again (to Muldis DB) later on.  With the name change allowed for the
+    previous version numbering of Rosetta to be dropped, and this rewrite
+    would eventually be first released as version zero.
+
+    * Unlike both Rosetta incarnations, QDRDBMS started off explicitly
+    having no external dependencies at all save Perl 5 or Perl 6 itself
+    (and what they bundle), so this made it simpler yet in design, and in
+    particular made it very easy to install (no dependency tree).
+
+    * QDRDBMS was started in the wake of having had a lot more experience
+    in reading up on the truly relational model of data, and was now
+    designed fundamentally to be the design and implementation of a new
+    turing complete programming language for working with relational
+    databases, now called "QDRDBMS D".
+
+    * QDRDBMS actually had a lot of code written for it this time, with the
+    focus initially being to code first and document later, to experiment
+    with what might work out.
+
+    * Made an experimental CPAN release of QDRDBMS version 0.0.0 on
+    2007-05-31, which specifically was a quick branch that stripped out all
+    the code and just contained the documentation.  This was the only CPAN
+    release of the (partial) project under the QDRDBMS name.
+
+    * Shortly after this, QDRDBMS was renamed to its presumably final name
+    of "Muldis DB", and its command language to "Muldis D".  But while
+    "Muldis D" stuck, "Muldis DB" was fated for a further rename later.
+
+2006-04-14 thru 2006-11-22
+
+    * Started a complementary Perl 6 project named "Relation" which was
+    intended to provide native tuple and relation data types for ordinary
+    use in Perl 6 programs like other built-in collection types.  The first
+    commit was Pugs SVN rev 9938, on 2006-04-14, and Pugs 6.2.12
+    (2006-06-26) included it.
+
+    * On 2006-07-04, renamed this project to "Set-Relation", which it
+    remains to this day.  Pugs 6.2.13 and later included this.
+
+    * Set-Relation received various small updates thru 2007-02-03, but is
+    now stagnant; it will likely get un-stuck after Muldis Rosetta sets an
+    example for it.
+
+2006-02-01 thru 2006-04-13
+
+    * The first simultaneous releases of the Perl 5 and 6 versions of
+    Rosetta's rewrite occurred on 2006-02-01; they were also the first CPAN
+    releases of either version.  The Perl 6 one was Pugs release 6.2.11
+    (SVN rev 8934).
+
+    * On 2006-02-23 was the first (Perl 5) CPAN release of Rosetta where
+    the project was then officially an implementation of "The Third
+    Manifesto", the central work of Darwen and Date's DBMS proposal;
+    moreover, Rosetta's command language was named "Rosetta D", to be a "D"
+    language by the terms of said proposal.
+
+    * On 2006-03-20 was the (Perl 5) release that declared Rosetta was to
+    be fundamentally a self-contained relational DBMS (and the core
+    distribution would bundle such an implementation of its API) rather
+    than "just" a DBMS wrapper; though extensions could still chose to
+    operate as wrappers over other DBMSs.
+
+    * On 2006-04-13 was the last CPAN release of the Perl 5 Rosetta, and
+    Pugs 6.2.12 (SVN rev 10930), on 2006-06-26, had the corresponding Perl
+    6 version; Pugs 6.2.13 (SVN rev 11402), on 2006-10-27, had the last
+    CPAN release of Perl 6 Rosetta, with trivial Perl 6 only updates.
+    After this, Pugs would have a Muldis Rosetta instead.
+
+    * This time period also saw very little code, and almost entirely
+    documentation updates.
+
+    * However, the code that did exist at this time was trying so hard to
+    be alike between Perl 5 and Perl 6 that the Perl 5 version had external
+    dependencies on a half-dozen CPAN distros that provided features like
+    Perl 6 builtins, but said features were largely trivial.  Both versions
+    also went to trouble to make their user text (support) multi-lingual.
+
+2005-12-06 thru 2006-01-31
+
+    * Rosetta started to evolve so that its API and design was based on
+    relational algebra, which is a lot of smaller generic constructs that
+    can easily be arranged into queries; this is in contrast to the
+    previous design based around monolithic and unwieldy SQL "select"
+    queries.  Generally speaking, there was increasing influence on the
+    design by Hugh Darwen's and Chris Date's proposals on how a truly
+    relational DBMS should work.  This time period also saw very little
+    code, and almost entirely documentation updates.
+
+2005-12-05
+
+    * Darren Duncan is introduced by David Wheeler to the truly relational
+    model of data, in a posting on the Bricolage development list in the
+    "Re: [6977] New branch for maintenance of Bricolage 1.10.x." thread.
+
+    * David said that Darren's expressed thought, that compound data types
+    in table fields was a violation of first normal form, was in fact a
+    misconception about the relational model.  David then referenced a
+    recent interview with C. J. Date.
+
+    * This set off a chain of events which was the largest paradigm shift
+    to ever affect the Rosetta project.  While the continuing goal of
+    Rosetta remained largely the same, the way this was to be accomplished
+    would become quite different, and the project would gain a new goal, to
+    help improve the design of relational DBMSs themselves.
+
+2005-09-30 thru 2005-12-04
+
+    * Started a full rewrite of Rosetta, with the intent of avoiding being
+    over-engineered, and cutting corners in the short term so to get
+    something useable at all sooner.  The idea was to focus on vertical
+    development first, so that at least a subset of features work earlier,
+    taking the development strategy of Perl6-Pugs itself as an example;
+    this is in contrast to the more horizontal development strategy of the
+    first Rosetta implementation.
+
+    * Moreover, this rewrite was being done simultaneously in both Perl 5
+    and Perl 6; each language had its own independent but synchronized
+    version, with the Perl 6 one intended to be the main future one that
+    guided design decisions, and the Perl 5 one intended to be the one
+    production-ready first, to be used until Perl 6 itself was production
+    ready.  That co-development was maintained afterwards, and happens with
+    the Muldis Rosetta core.
+
+    * There was practically no code produced at this time, mainly just
+    design documentation.
+
+    * This Rosetta rewrite retained the version numbering of the previous
+    line, and its numbers were a bit awkward as a result.
+
+2002-11-12 thru 2005-09-28, plus 2006-01-13
+
+    * Developed and released on CPAN the Rosetta DBMS framework, whose
+    intended purpose was to provide rigorous portability of database
+    schemas and database-using applications between different SQL DBMS
+    products.  A lot of design documentation was produced, as well as some
+    code and tests, but while a significant amount of executing code was
+    produced, no solution emerged that was actually useable for real work;
+    what did get produced was also unnecessarily complicated.
+
+    * Throughout the life of that project, these various module namespaces
+    were used for CPAN distributions of parts of the framework:
+
+        - DBIx-Portable (2003-01-05)
+        - Rosetta (2003-01-21 thru 2005-09-28, plus 2006-01-13)
+        - SQL::ObjectModel (2003-06-11 thru 2003-09-16)
+        - SQL::SyntaxModel (2003-09-26 thru 2004-09-13)
+        - SQL::Routine (2004-10-04 thru 2005-09-28)
+
+    * The "Rosetta" and "SQL-Routine" names were also registered with "The
+    Perl 5 Module List", on 2003-01-21 and 2004-10-04, respectively.  Later
+    on, the "SQL-Routine" registration was deleted on 2006-01-07, and the
+    "Rosetta" registration on 2007-04-24.
+
+    * A translation of some parts of Rosetta into Perl 6 was made, under
+    the auspices of the Perl6-Pugs project, between 2005-03-25 (Pugs SVN
+    rev 1194) and 2005-04-02 (Pugs SVN rev 1463); Pugs release 6.0.13
+    (2005-03-26) included a version, but Pugs 6.0.14 (2005-04-04) did not;
+    the Perl 6 versions didn't work, however, which is why they were soon
+    excised from the Pugs VC (to P6PAN, which didn't go anywhere).
+
+    * A Lightning Talk was also given introducing Rosetta at OSCON 2005;
+    but it is Muldis Rosetta instead that will fulfill the promises made in
+    it.
+
+2002-06-07
+
+    * Started writing self-contained code components that were explicitly
+    designed to enable external code that used them to work seamlessly on
+    multiple database products.  Some of this work was reused later in the
+    Rosetta DBMS framework et al, and hence 2002 is the start of the
+    declared copyright date range for Muldis Rosetta.
