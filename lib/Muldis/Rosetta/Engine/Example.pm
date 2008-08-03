@@ -9,17 +9,15 @@ use Muldis::Rosetta::Interface;
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example; # module
-    use version; our $VERSION = qv('0.7.0');
+    use version; our $VERSION = qv('0.8.0');
     # Note: This given version applies to all of this file's packages.
 
 ###########################################################################
 
 sub new_machine {
     my ($args) = @_;
-    my ($exp_ast_lang, $machine_config)
-        = @{$args}{'exp_ast_lang', 'machine_config'};
+    my ($machine_config) = @{$args}{'machine_config'};
     return Muldis::Rosetta::Engine::Example::Public::Machine->new({
-        'exp_ast_lang' => $exp_ast_lang,
         'machine_config' => $machine_config });
 }
 
@@ -38,7 +36,6 @@ sub new_machine {
     # User-supplied config data for this Machine object.
     # For the moment, the Example Engine doesn't actually have anything
     # that can be config in this way, so input $machine_config is ignored.
-    my $ATTR_EXP_AST_LANG   = 'exp_ast_lang';
     my $ATTR_MACHINE_CONFIG = 'machine_config';
 
     # Lists of user-held objects associated with parts of this Machine.
@@ -57,11 +54,9 @@ sub new {
 
 sub _build {
     my ($self, $args) = @_;
-    my ($exp_ast_lang, $machine_config)
-        = @{$args}{'exp_ast_lang', 'machine_config'};
+    my ($machine_config) = @{$args}{'machine_config'};
 
     # TODO: input checks.
-    $self->{$ATTR_EXP_AST_LANG}   = [@{$exp_ast_lang}];
     $self->{$ATTR_MACHINE_CONFIG} = $machine_config;
 
     $self->{$ATTR_ASSOC_PROCESSES} = {};
@@ -78,24 +73,11 @@ sub DESTROY {
 
 ###########################################################################
 
-sub fetch_exp_ast_lang {
-    my ($self) = @_;
-    return [@{$self->{$ATTR_EXP_AST_LANG}}];
-}
-
-sub store_exp_ast_lang {
-    my ($self, $args) = @_;
-    my ($lang) = @{$args}{'lang'};
-    $self->{$ATTR_EXP_AST_LANG} = [@{$lang}];
-    return;
-}
-
-###########################################################################
-
 sub new_process {
-    my ($self) = @_;
+    my ($self, $args) = @_;
+    my ($process_config) = @{$args}{'process_config'};
     return Muldis::Rosetta::Engine::Example::Public::Process->new({
-        'machine' => $self });
+        'machine' => $self, 'process_config' => $process_config });
 }
 
 sub assoc_processes {
@@ -118,12 +100,17 @@ sub assoc_processes {
 
     my $ATTR_MACHINE = 'machine';
 
+    # User-supplied config data for this Process object.
+    # For the moment, the Example Engine doesn't actually have anything
+    # that can be config in this way, so input $process_config is ignored.
+    my $ATTR_PROCESS_CONFIG = 'process_config';
+
+    my $ATTR_COMMAND_LANG = 'command_lang';
+
     # Lists of user-held objects associated with parts of this Process.
     # For each of these, Hash keys are obj .WHERE/addrs, vals the objs.
     # These should be weak obj-refs, so objs disappear from here
-    my $ATTR_ASSOC_VARS          = 'assoc_vars';
-    my $ATTR_ASSOC_FUNC_BINDINGS = 'assoc_func_bindings';
-    my $ATTR_ASSOC_PROC_BINDINGS = 'assoc_proc_bindings';
+    my $ATTR_ASSOC_VALUES = 'assoc_values';
 
     # Maintain actual state of the this DBMS' virtual machine.
     # TODO: the VM itself should be in another file, this attr with it.
@@ -143,15 +130,18 @@ sub new {
 
 sub _build {
     my ($self, $args) = @_;
-    my ($machine) = @{$args}{'machine'};
+    my ($machine, $process_config) = @{$args}{'machine', 'process_config'};
 
     $self->{$ATTR_MACHINE} = $machine;
     $machine->{$MACHINE_ATTR_ASSOC_PROCESSES}->{refaddr $self} = $self;
     weaken $machine->{$MACHINE_ATTR_ASSOC_PROCESSES}->{refaddr $self};
 
-    $self->{$ATTR_ASSOC_VARS}          = {};
-    $self->{$ATTR_ASSOC_FUNC_BINDINGS} = {};
-    $self->{$ATTR_ASSOC_PROC_BINDINGS} = {};
+    # TODO: input checks.
+    $self->{$ATTR_PROCESS_CONFIG} = $process_config;
+
+    $self->{$ATTR_COMMAND_LANG} = undef;
+
+    $self->{$ATTR_ASSOC_VALUES} = {};
 
     $self->{$ATTR_TRANS_NEST_LEVEL} = 0;
 
@@ -162,82 +152,84 @@ sub DESTROY {
     my ($self) = @_;
     # TODO: check for active trans and rollback ... or member VM does it.
     # Likewise with closing open files or whatever.
+    delete $self->{$ATTR_MACHINE}->{
+        $MACHINE_ATTR_ASSOC_PROCESSES}->{refaddr $self};
     return;
 }
 
 ###########################################################################
 
-sub new_var {
-    my ($self, $args) = @_;
-    my ($decl_type) = @{$args}{'decl_type'};
-    return Muldis::Rosetta::Engine::Example::Public::Var->new({
-        'process' => $self, 'decl_type' => $decl_type });
-}
-
-sub assoc_vars {
+sub assoc_machine {
     my ($self) = @_;
-    return [values %{$self->{$ATTR_ASSOC_VARS}}];
-}
-
-sub new_func_binding {
-    my ($self) = @_;
-    return Muldis::Rosetta::Engine::Example::Public::FuncBinding->new({
-        'process' => $self });
-}
-
-sub assoc_func_bindings {
-    my ($self) = @_;
-    return [values %{$self->{$ATTR_ASSOC_FUNC_BINDINGS}}];
-}
-
-sub new_proc_binding {
-    my ($self) = @_;
-    return Muldis::Rosetta::Engine::Example::Public::ProcBinding->new({
-        'process' => $self });
-}
-
-sub assoc_proc_bindings {
-    my ($self) = @_;
-    return [values %{$self->{$ATTR_ASSOC_PROC_BINDINGS}}];
+    return $self->{$ATTR_MACHINE};
 }
 
 ###########################################################################
 
-sub call_func {
+sub command_lang {
+    my ($self) = @_;
+    return $self->{$ATTR_COMMAND_LANG};
+}
+
+sub update_command_lang {
     my ($self, $args) = @_;
-    my ($func_name, $f_args) = @{$args}{'func_name', 'args'};
+    my ($lang) = @{$args}{'lang'};
+    $self->{$ATTR_COMMAND_LANG} = $lang;
+    return;
+}
 
-#    my $f = Muldis::Rosetta::Engine::Example::Public::FuncBinding->new({
-#        'process' => $self });
+###########################################################################
 
-    my $result = Muldis::Rosetta::Engine::Example::Public::Var->new({
-        'process' => $self,
-        'decl_type' => 'sys.Core.Universal.Universal' });
+sub execute {
+    my ($self, $args) = @_;
+    my ($source_code) = @{$args}{'source_code'};
 
-#    $f->bind_func({ 'func_name' => $func_name });
-#    $f->bind_result({ 'var' => $result });
-#    $f->bind_params({ 'args' => $f_args });
+    # TODO: execute $source code
 
-#    $f->call();
+    return;
+}
+
+###########################################################################
+
+sub new_value {
+    my ($self, $args) = @_;
+    my ($source_code) = @{$args}{'source_code'};
+    return Muldis::Rosetta::Engine::Example::Public::Value->new({
+        'process' => $self, 'source_code' => $source_code });
+}
+
+sub assoc_values {
+    my ($self) = @_;
+    return [values %{$self->{$ATTR_ASSOC_VALUES}}];
+}
+
+###########################################################################
+
+sub func_invo {
+    my ($self, $args) = @_;
+    my ($function, $f_args) = @{$args}{'function', 'args'};
+
+    my $result = $self->new_value(); # TODO, the real work
 
     return $result;
 }
 
-###########################################################################
-
-sub call_proc {
+sub upd_invo {
     my ($self, $args) = @_;
-    my ($proc_name, $upd_args, $ro_args)
-        = @{$args}{'proc_name', 'upd_args', 'ro_args'};
+    my ($updater, $upd_args, $ro_args)
+        = @{$args}{'updater', 'upd_args', 'ro_args'};
 
-#    my $p = Muldis::Rosetta::Engine::Example::Public::FuncBinding->new({
-#        'process' => $self });
+    # TODO, the real work
 
-#    $p->bind_proc({ 'proc_name' => $proc_name });
-#    $p->bind_upd_params({ 'args' => $upd_args });
-#    $p->bind_ro_params({ 'args' => $ro_args });
+    return;
+}
 
-#    $p->call();
+sub proc_invo {
+    my ($self, $args) = @_;
+    my ($procedure, $upd_args, $ro_args)
+        = @{$args}{'procedure', 'upd_args', 'ro_args'};
+
+    # TODO, the real work
 
     return;
 }
@@ -283,19 +275,19 @@ sub rollback_trans {
 ###########################################################################
 ###########################################################################
 
-{ package Muldis::Rosetta::Engine::Example::Public::Var; # class
-    use base 'Muldis::Rosetta::Interface::Var';
+{ package Muldis::Rosetta::Engine::Example::Public::Value; # class
+    use base 'Muldis::Rosetta::Interface::Value';
 
     use Carp;
     use Scalar::Util qw( refaddr weaken );
 
     my $ATTR_PROCESS = 'process';
 
-    my $ATTR_VAR = 'var';
-    # TODO: cache Perl-Hosted Muldis D version of $!var.
+    my $ATTR_VALUE = 'value';
+    # TODO: cache Perl-Hosted Muldis D version of $!value.
 
-    # Allow Var objs to update Process' "assoc" list re themselves.
-    my $PROCESS_ATTR_ASSOC_VARS = 'assoc_vars';
+    # Allow Value objs to update Process' "assoc" list re themselves.
+    my $PROCESS_ATTR_ASSOC_VALUES = 'assoc_values';
 
 ###########################################################################
 
@@ -308,14 +300,16 @@ sub new {
 
 sub _build {
     my ($self, $args) = @_;
-    my ($process, $decl_type) = @{$args}{'process', 'decl_type'};
+    my ($process, $source_code) = @{$args}{'process', 'source_code'};
 
     $self->{$ATTR_PROCESS} = $process;
-    $process->{$PROCESS_ATTR_ASSOC_VARS}->{refaddr $self} = $self;
-    weaken $process->{$PROCESS_ATTR_ASSOC_VARS}->{refaddr $self};
+    $process->{$PROCESS_ATTR_ASSOC_VALUES}->{refaddr $self} = $self;
+    weaken $process->{$PROCESS_ATTR_ASSOC_VALUES}->{refaddr $self};
 
-#    $self->{$ATTR_VAR} = Muldis::Rosetta::Engine::Example::VM::Var->new({
-#        'decl_type' => $decl_type }); # TODO; or some such
+    # TODO: input checks.
+#    $self->{$ATTR_VALUE}
+#        = Muldis::Rosetta::Engine::Example::VM::Value->new({
+#            'source_code' => $source_code }); # TODO; or some such
 
     return;
 }
@@ -323,63 +317,29 @@ sub _build {
 sub DESTROY {
     my ($self) = @_;
     delete $self->{$ATTR_PROCESS}->{
-        $PROCESS_ATTR_ASSOC_VARS}->{refaddr $self};
+        $PROCESS_ATTR_ASSOC_VALUES}->{refaddr $self};
     return;
 }
 
 ###########################################################################
 
-sub fetch_ast {
+sub assoc_process {
     my ($self) = @_;
-#    return $self->{$ATTR_VAR}->as_phmd(); # TODO; or some such
-    return;
+    return $self->{$ATTR_PROCESS};
 }
 
-sub store_ast {
+###########################################################################
+
+sub source_code {
     my ($self, $args) = @_;
-    my ($ast) = @{$args}{'ast'};
-    # TODO: input checks.
-#    $self->{$ATTR_VAR} = from_phmd( $ast ); # TODO; or some such
+    my ($lang) = @{$args}{'lang'};
+#    return $self->{$ATTR_VALUE}->source_code( $lang ); # TODO; or som such
     return;
 }
 
 ###########################################################################
 
-} # class Muldis::Rosetta::Engine::Example::Public::Var
-
-###########################################################################
-###########################################################################
-
-{ package Muldis::Rosetta::Engine::Example::Public::FuncBinding; # class
-    use base 'Muldis::Rosetta::Interface::FuncBinding';
-
-    use Carp;
-    use Scalar::Util qw( refaddr weaken );
-
-###########################################################################
-
-# TODO.
-
-###########################################################################
-
-} # class Muldis::Rosetta::Engine::Example::Public::FuncBinding
-
-###########################################################################
-###########################################################################
-
-{ package Muldis::Rosetta::Engine::Example::Public::ProcBinding; # class
-    use base 'Muldis::Rosetta::Interface::ProcBinding';
-
-    use Carp;
-    use Scalar::Util qw( refaddr weaken );
-
-###########################################################################
-
-# TODO.
-
-###########################################################################
-
-} # class Muldis::Rosetta::Engine::Example::Public::ProcBinding
+} # class Muldis::Rosetta::Engine::Example::Public::Value
 
 ###########################################################################
 ###########################################################################
@@ -398,15 +358,13 @@ Self-contained reference implementation of a Muldis Rosetta Engine
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Engine::Example version 0.7.0 for
+This document describes Muldis::Rosetta::Engine::Example version 0.8.0 for
 Perl 5.
 
 It also describes the same-number versions for Perl 5 of
 Muldis::Rosetta::Engine::Example::Public::Machine,
 Muldis::Rosetta::Engine::Example::Public::Process,
-Muldis::Rosetta::Engine::Example::Public::Var,
-Muldis::Rosetta::Engine::Example::Public::FuncBinding, and
-Muldis::Rosetta::Engine::Example::Public::ProcBinding.
+Muldis::Rosetta::Engine::Example::Public::Value.
 
 =head1 SYNOPSIS
 
@@ -438,8 +396,33 @@ I<This documentation is pending.>
 
 =head1 INTERFACE
 
-I<This documentation is pending; this section may also be split into
-several.>
+Muldis::Rosetta::Engine::Example supports multiple command languages, all
+of which are official Muldis D dialects.  You may supply commands to
+Example written in any of the following:
+
+=over
+
+=item B<Tiny Plain Text Muldis D>
+
+See L<Muldis::D::Dialect::PTMD_Tiny> for details.
+
+The language name is specified either as a Perl character string whose
+value is C<Muldis_D:'http://muldis.com':'0.43.0':'PTMD_Tiny':{}> or as a
+Perl array whose value is C<[ 'Muldis_D', 'http://muldis.com', '0.43.0',
+'PTMD_Tiny', {} ]>.  No other version numbers are currently supported.
+
+=item B<Tiny Perl Hosted Data Muldis D>
+
+See L<Muldis::D::Dialect::HDMD_Perl_Tiny> for details.
+
+The language name is specified either as a Perl character string whose
+value is C<Muldis_D:'http://muldis.com':'0.43.0':'HDMD_Perl_Tiny':{}> or as
+a Perl array whose value is C<[ 'Muldis_D', 'http://muldis.com', '0.43.0',
+'HDMD_Perl_Tiny', {} ]>.  No other version numbers are currently supported.
+
+=back
+
+You may also supply or retrieve data through Example in any of the above.
 
 =head1 DIAGNOSTICS
 
@@ -459,7 +442,7 @@ Perl 5.x.y that is at least 5.10.0, and are also on CPAN for separate
 installation by users of earlier Perl versions: L<version>.
 
 It also requires these Perl 5 classes that are in the current distribution:
-L<Muldis::Rosetta::Interface-0.7.0|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface-0.8.0|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 

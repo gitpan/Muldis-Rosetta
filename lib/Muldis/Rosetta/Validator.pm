@@ -9,7 +9,7 @@ use Muldis::Rosetta::Interface;
 ###########################################################################
 
 { package Muldis::Rosetta::Validator; # module
-    use version; our $VERSION = qv('0.7.0');
+    use version; our $VERSION = qv('0.8.0');
 
     use Test::More;
 
@@ -17,8 +17,8 @@ use Muldis::Rosetta::Interface;
 
 sub main {
     my ($args) = @_;
-    my ($engine_name, $machine_config)
-        = @{$args}{'engine_name', 'machine_config'};
+    my ($engine_name, $machine_config, $process_config)
+        = @{$args}{'engine_name', 'machine_config', 'process_config'};
 
     plan( 'tests' => 13 );
 
@@ -28,12 +28,15 @@ sub main {
     # Instantiate a Muldis Rosetta DBMS / virtual machine.
     my $machine = Muldis::Rosetta::Interface::new_machine({
         'engine_name' => $engine_name,
-        'exp_ast_lang' => [ 'Muldis_D', 'http://muldis.com', '0.25.0' ],
         'machine_config' => $machine_config,
     });
     does_ok( $machine, 'Muldis::Rosetta::Interface::Machine' );
-    my $process = $machine->new_process();
+    my $process = $machine->new_process({
+        'process_config' => $process_config,
+    });
     does_ok( $process, 'Muldis::Rosetta::Interface::Process' );
+    $process->update_command_lang({ 'lang' => [ 'Muldis_D',
+        'http://muldis.com', '0.43.0', 'HDMD_Perl_Tiny', {} ] });
 
     _scenario_foods_suppliers_shipments_v1( $process );
 
@@ -48,156 +51,141 @@ sub main {
 sub _scenario_foods_suppliers_shipments_v1 {
     my ($process) = @_;
 
-    # Declare our Perl-lexical variables to use for source data.
+    # Declare our example literal source data sets.
 
-    my $src_suppliers = $process->new_var({
-        'decl_type' => 'sys.Core.Relation.Relation' });
-    does_ok( $src_suppliers, 'Muldis::Rosetta::Interface::Var' );
-    my $src_foods = $process->new_var({
-        'decl_type' => 'sys.Core.Relation.Relation' });
-    does_ok( $src_foods, 'Muldis::Rosetta::Interface::Var' );
-    my $src_shipments = $process->new_var({
-        'decl_type' => 'sys.Core.Relation.Relation' });
-    does_ok( $src_shipments, 'Muldis::Rosetta::Interface::Var' );
-
-    # Load our example literal source data sets into said Perl-lexicals.
-
-    $src_suppliers->store_ast({
-        'ast' => [ 'Relation', 'sys.Core.Relation.Relation', [
+    my $src_suppliers = $process->new_value({
+        'source_code' => [ 'Relation', [
             {
-                'farm'    => [ 'NEText', 'Hodgesons' ],
-                'country' => [ 'NEText', 'Canada' ],
+                'farm'    => [ 'Text', 'Hodgesons' ],
+                'country' => [ 'Text', 'Canada' ],
             },
             {
-                'farm'    => [ 'NEText', 'Beckers' ],
-                'country' => [ 'NEText', 'England' ],
+                'farm'    => [ 'Text', 'Beckers' ],
+                'country' => [ 'Text', 'England' ],
             },
             {
-                'farm'    => [ 'NEText', 'Wickets' ],
-                'country' => [ 'NEText', 'Canada' ],
+                'farm'    => [ 'Text', 'Wickets' ],
+                'country' => [ 'Text', 'Canada' ],
             },
         ] ],
     });
     pass( 'no death from loading example suppliers data into VM' );
+    does_ok( $src_suppliers, 'Muldis::Rosetta::Interface::Value' );
 
-    $src_foods->store_ast({
-        'ast' => [ 'Relation', 'sys.Core.Relation.Relation', [
+    my $src_foods = $process->new_value({
+        'source_code' => [ 'Relation', [
             {
-                'food'   => [ 'NEText', 'Bananas' ],
-                'colour' => [ 'NEText', 'yellow' ],
+                'food'   => [ 'Text', 'Bananas' ],
+                'colour' => [ 'Text', 'yellow' ],
             },
             {
-                'food'   => [ 'NEText', 'Carrots' ],
-                'colour' => [ 'NEText', 'orange' ],
+                'food'   => [ 'Text', 'Carrots' ],
+                'colour' => [ 'Text', 'orange' ],
             },
             {
-                'food'   => [ 'NEText', 'Oranges' ],
-                'colour' => [ 'NEText', 'orange' ],
+                'food'   => [ 'Text', 'Oranges' ],
+                'colour' => [ 'Text', 'orange' ],
             },
             {
-                'food'   => [ 'NEText', 'Kiwis' ],
-                'colour' => [ 'NEText', 'green' ],
+                'food'   => [ 'Text', 'Kiwis' ],
+                'colour' => [ 'Text', 'green' ],
             },
             {
-                'food'   => [ 'NEText', 'Lemons' ],
-                'colour' => [ 'NEText', 'yellow' ],
+                'food'   => [ 'Text', 'Lemons' ],
+                'colour' => [ 'Text', 'yellow' ],
             },
         ] ],
     });
     pass( 'no death from loading example foods data into VM' );
+    does_ok( $src_foods, 'Muldis::Rosetta::Interface::Value' );
 
-    $src_shipments->store_ast({
-        'ast' => [ 'Relation', 'sys.Core.Relation.Relation', [
+    my $src_shipments = $process->new_value({
+        'source_code' => [ 'Relation', [
             {
-                'farm' => [ 'NEText', 'Hodgesons' ],
-                'food' => [ 'NEText', 'Kiwis' ],
-                'qty'  => [ 'PInt', 'perl_pint', 100 ],
+                'farm' => [ 'Text', 'Hodgesons' ],
+                'food' => [ 'Text', 'Kiwis' ],
+                'qty'  => [ 'Int', 'perl_int', 100 ],
             },
             {
-                'farm' => [ 'NEText', 'Hodgesons' ],
-                'food' => [ 'NEText', 'Lemons' ],
-                'qty'  => [ 'PInt', 'perl_pint', 130 ],
+                'farm' => [ 'Text', 'Hodgesons' ],
+                'food' => [ 'Text', 'Lemons' ],
+                'qty'  => [ 'Int', 'perl_int', 130 ],
             },
             {
-                'farm' => [ 'NEText', 'Hodgesons' ],
-                'food' => [ 'NEText', 'Oranges' ],
-                'qty'  => [ 'PInt', 'perl_pint', 10 ],
+                'farm' => [ 'Text', 'Hodgesons' ],
+                'food' => [ 'Text', 'Oranges' ],
+                'qty'  => [ 'Int', 'perl_int', 10 ],
             },
             {
-                'farm' => [ 'NEText', 'Hodgesons' ],
-                'food' => [ 'NEText', 'Carrots' ],
-                'qty'  => [ 'PInt', 'perl_pint', 50 ],
+                'farm' => [ 'Text', 'Hodgesons' ],
+                'food' => [ 'Text', 'Carrots' ],
+                'qty'  => [ 'Int', 'perl_int', 50 ],
             },
             {
-                'farm' => [ 'NEText', 'Beckers' ],
-                'food' => [ 'NEText', 'Carrots' ],
-                'qty'  => [ 'PInt', 'perl_pint', 90 ],
+                'farm' => [ 'Text', 'Beckers' ],
+                'food' => [ 'Text', 'Carrots' ],
+                'qty'  => [ 'Int', 'perl_int', 90 ],
             },
             {
-                'farm' => [ 'NEText', 'Beckers' ],
-                'food' => [ 'NEText', 'Bananas' ],
-                'qty'  => [ 'PInt', 'perl_pint', 120 ],
+                'farm' => [ 'Text', 'Beckers' ],
+                'food' => [ 'Text', 'Bananas' ],
+                'qty'  => [ 'Int', 'perl_int', 120 ],
             },
             {
-                'farm' => [ 'NEText', 'Wickets' ],
-                'food' => [ 'NEText', 'Lemons' ],
-                'qty'  => [ 'PInt', 'perl_pint', 30 ],
+                'farm' => [ 'Text', 'Wickets' ],
+                'food' => [ 'Text', 'Lemons' ],
+                'qty'  => [ 'Int', 'perl_int', 30 ],
             },
         ] ],
     });
     pass( 'no death from loading example shipments data into VM' );
+    does_ok( $src_shipments, 'Muldis::Rosetta::Interface::Value' );
 
     # Execute a query against the virtual machine, to look at our sample
     # data and see what suppliers there are for foods coloured 'orange'.
 
-    my $desi_colour
-        = $process->new_var({ 'decl_type' => 'sys.Core.Text.Text' });
-    does_ok( $desi_colour, 'Muldis::Rosetta::Interface::Var' );
-    $desi_colour->store_ast({ 'ast' => [ 'NEText', 'orange' ] });
+    my $desi_colour = $process->new_value({
+        'source_code' => [ 'Text', 'orange' ] });
     pass( 'no death from loading desired colour into VM' );
+    does_ok( $desi_colour, 'Muldis::Rosetta::Interface::Value' );
 
-    my $matched_suppl = $process->call_func({
-        'func_name' => 'sys.Core.Relation.semijoin',
+    my $matched_suppl = $process->func_invo({
+        'function' => 'sys.std.Core.Relation.semijoin',
         'args' => {
             'source' => $src_suppliers,
-            'filter' => $process->call_func({
-                'func_name' => 'sys.Core.Relation.join',
+            'filter' => $process->func_invo({
+                'function' => 'sys.std.Core.Relation.join',
                 'args' => {
-                    'topic' => [ 'QuasiSet',
-                            'sys.Core.Spec.QuasiSetOfRelation', [
+                    'topic' => [ 'QuasiSet', [
                         $src_shipments,
                         $src_foods,
-                        [ 'Relation', 'sys.Core.Relation.Relation', [
-                            {
-                                'colour' => $desi_colour,
-                            },
-                        ] ],
+                        [ 'Relation', [ { 'colour' => $desi_colour } ] ],
                     ] ],
                 },
             }),
         },
     });
     pass( 'no death from executing search query' );
-    does_ok( $matched_suppl, 'Muldis::Rosetta::Interface::Var' );
+    does_ok( $matched_suppl, 'Muldis::Rosetta::Interface::Value' );
 
-    my $matched_suppl_ast = $matched_suppl->fetch_ast();
+    my $matched_suppl_as_perl = $matched_suppl->source_code();
     pass( 'no death from fetching search results from VM' );
 
     # Finally, use the result somehow (not done here).
     # The result should be:
-    # [ 'Relation', 'sys.Core.Relation.Relation', [
+    # [ 'Relation', [
     #     {
-    #         'farm'    => [ 'NEText', 'Hodgesons' ],
-    #         'country' => [ 'NEText', 'Canada' ],
+    #         'farm'    => [ 'Text', 'Hodgesons' ],
+    #         'country' => [ 'Text', 'Canada' ],
     #     },
     #     {
-    #         'farm'    => [ 'NEText', 'Beckers' ],
-    #         'country' => [ 'NEText', 'England' ],
+    #         'farm'    => [ 'Text', 'Beckers' ],
+    #         'country' => [ 'Text', 'England' ],
     #     },
     # ] ]
 
     print "# debug: orange food suppliers found:\n";
-#    print "# " . $rel_def_matched_suppl->as_perl() . "\n";
+#    print "# " . $matched_suppl_as_perl->as_perl() . "\n";
     print "#  TODO, as_perl()\n";
 
     return;
@@ -232,7 +220,7 @@ A common comprehensive test suite to run against all Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Validator version 0.7.0 for Perl
+This document describes Muldis::Rosetta::Validator version 0.8.0 for Perl
 5.
 
 =head1 SYNOPSIS
@@ -320,7 +308,7 @@ Perl 5.x.y that is at least 5.10.0, and are also on CPAN for separate
 installation by users of earlier Perl versions: L<version>.
 
 It also requires these Perl 5 classes that are in the current distribution:
-L<Muldis::Rosetta::Interface-0.7.0|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface-0.8.0|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 
