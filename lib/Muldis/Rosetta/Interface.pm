@@ -7,7 +7,7 @@ use warnings FATAL => 'all';
 ###########################################################################
 
 { package Muldis::Rosetta::Interface; # module
-    use version; our $VERSION = qv('0.9.0');
+    use version; our $VERSION = qv('0.10.0');
     # Note: This given version applies to all of this file's packages.
 
     use Carp;
@@ -133,7 +133,7 @@ Common public API for Muldis Rosetta Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Interface version 0.9.0 for Perl
+This document describes Muldis::Rosetta::Interface version 0.10.0 for Perl
 5.
 
 It also describes the same-number versions for Perl 5 of
@@ -153,7 +153,7 @@ a third Perl variable holding the relation data of the result.
         'engine_name' => 'Muldis::Rosetta::Engine::Example' });
     my $process = $machine->new_process();
     $process->update_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.43.0', 'HDMD_Perl_Tiny', {} ] });
+        'http://muldis.com', '0.46.0', 'HDMD_Perl_Tiny', {} ] });
 
     my $r1 = $process->new_value({ 'source_code' => [ 'Relation', [
         {
@@ -346,8 +346,7 @@ with the invocant C<Process>; that C<Value> object is initialized using the
 (typically Muldis D) source code given in its C<$source_code> argument,
 which defines a value literal.  If the C<$source_code> is in a Perl Hosted
 Data language, then it may consist partially of other C<Value> objects.  If
-C<$source_code> is itself just a C<Value> object, then this method will
-just return that same object.
+C<$source_code> is itself just a C<Value> object, then it will be cloned.
 
 =item C<assoc_values of Array ()>
 
