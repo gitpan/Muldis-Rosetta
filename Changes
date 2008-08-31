@@ -1,6 +1,84 @@
                               Muldis::Rosetta
 ---------------------------------------------------------------------------
 
+2008-08-30   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis Rosetta version 0.11.0 for Perl 5 is released on CPAN as
+    Muldis-Rosetta-0.11.0.tar.gz.  Muldis Rosetta version 0.11.0 for Perl 6
+    is not released at all.  The rest of this Changes entry refers only to
+    the Perl 5 version, and it should not be assumed that the Perl 6
+    version incorporates all of said updates, though it may have some of
+    them.
+
+    * New file versions are: Rosetta.pm and Interface.pm and Validator.pm
+    and Example.pm 0.11.0.  The other pre-existing versioned files are
+    unchanged.
+
+    * (Interface.pm)  Updated the API documentation to fix a certain
+    ambiguity problem with source code.  It now says that any supplied
+    source code that is a Perl Str is always treated as being some
+    plain-text language, and source code that is any kind of Perl 5
+    reference or object is always treated as being some Perl-hosted-data
+    language; to disambiguate Perl-hosted-data source code that consists of
+    just a "Cat.Name" literal (which is normally specified as a Perl Str
+    rather than a Perl Array) from general plain-text code, Muldis Rosetta
+    now requires one to specify such Perl-hosted-data source code by
+    supplying source code which is a Perl 5 reference to a Perl Str, rather
+    than supplying it as a plain Perl Str.
+
+    * (Engine.pm)  Removed any 'use Carp' within class defs, since it turns
+    out that Moose exports its 'confess' into our classes for us.  (It also
+    exports 'blessed' of Scalar::Util.)
+
+    * (Interface.pm, Example.pm)  Removed the 2 role|class methods
+    "Machine.assoc_processes" and "Process.assoc_values", which seem to be
+    of dubious value; if in the future it turns out they actually would be
+    useful after all, they might then return.  Also removed the 2
+    corresponding attributes from Example since they aren't needed.
+
+    * (Interface.pm, Example.pm, Validator.pm)  Split up the conceptual
+    Process attribute "expected command language" into the 2 "expected
+    plain-text|perl-hosted-data command language", so now the plain-text
+    and Perl-hosted-data language groupings each have their default which
+    can be unset or set that just affects work with that language group.
+    Split up the Process role|class' 2 "(|update_)command_lang" methods
+    into the 4 "(|update_)(pt|hd)_command_lang" methods; also updated the
+    "pt" versions to return/take a Perl Str, and the "hd" to return/take a
+    Perl Array, rather than return/take Any.  Similarly split up the Value
+    role|class' 1 "source_code" method into the 2 "(pt|hd)_source_code"
+    methods; the return/take data types were similarly changed except that
+    the "hd" still results in Any.
+
+    * (Interface.pm)  Updated the API documentation to specify that when a
+    Process object has a defined "expected pt|hd command language"
+    attribute, then all pt|hd source code given to that process or built by
+    that process must be of that language; any declared language names used
+    per command may only be respected when the attribute is undefined.
+
+    * (Interface.pm, Validator.pm)  Updated the example|test Muldis D code
+    to use the less verbose ordered-attributes relation literal syntax
+    where the result doesn't make the file lines too long.
+
+    * (Example.pm)  Made several large Example.pm updates so that its code
+    more closely resembles what it would be once the other implementing
+    files of the Example Engine were added.  Added commented-out dependency
+    statements on 4 new files in the Example/ namespace: Runtime, Value,
+    PlainText, HostedData; it is also expected that those files in turn
+    would depend on yet more files such as: Storage, Operators, etc.  Added
+    new private attribute "_inner" to each of the Machine|Process|Value
+    classes (but in the last it is a rename from "_value"), whose declared
+    types are of classes that would be declared in either Runtime or Value;
+    the ::Public classes in Example.pm would then be serving as
+    public-facing wrappers for said.  Removed the private attributes
+    "_(machine|process)_config", "_trans_nest_level", since the "inner"
+    Machine|Process will have those instead.  Stripped down the 4
+    "trans"-named methods of Process so they now simply delegate to the
+    "inner" Process object's same methods, which would then do the work
+    that the stripped no longer do.  Fleshed out the Value class' BUILD
+    submethod and 2 "source_code" methods so that they properly invoke the
+    Muldis D source code parsers or builders that PlainText|HostedData
+    provide, by which the outside world interacts with the "inner" Value.
+
 2008-08-19   Darren Duncan <perl@DarrenDuncan.net>
 
     * Muldis Rosetta version 0.10.0 for Perl 5 is released on CPAN as

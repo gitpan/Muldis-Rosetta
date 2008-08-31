@@ -3,13 +3,13 @@ use utf8;
 use strict;
 use warnings FATAL => 'all';
 
-use Muldis::Rosetta::Interface;
+use Muldis::Rosetta::Interface 0.011000;
 
 ###########################################################################
 ###########################################################################
 
 { package Muldis::Rosetta::Validator; # module
-    use version; our $VERSION = qv('0.10.0');
+    use version 0.74; our $VERSION = qv('0.11.0');
 
     use Test::More;
 
@@ -35,8 +35,8 @@ sub main {
         'process_config' => $process_config,
     });
     does_ok( $process, 'Muldis::Rosetta::Interface::Process' );
-    $process->update_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.46.0', 'HDMD_Perl_Tiny', {} ] });
+    $process->update_hd_command_lang({ 'lang' => [ 'Muldis_D',
+        'http://muldis.com', '0.47.0', 'HDMD_Perl_Tiny', {} ] });
 
     _scenario_foods_suppliers_shipments_v1( $process );
 
@@ -54,46 +54,22 @@ sub _scenario_foods_suppliers_shipments_v1 {
     # Declare our example literal source data sets.
 
     my $src_suppliers = $process->new_value({
-        'source_code' => [ 'Relation', [
-            {
-                'farm'    => [ 'Text', 'Hodgesons' ],
-                'country' => [ 'Text', 'Canada' ],
-            },
-            {
-                'farm'    => [ 'Text', 'Beckers' ],
-                'country' => [ 'Text', 'England' ],
-            },
-            {
-                'farm'    => [ 'Text', 'Wickets' ],
-                'country' => [ 'Text', 'Canada' ],
-            },
+        'source_code' => [ 'Relation', [ 'farm', 'country', ], [
+            [ [ 'Text', 'Hodgesons' ], [ 'Text', 'Canada'  ], ],
+            [ [ 'Text', 'Beckers'   ], [ 'Text', 'England' ], ],
+            [ [ 'Text', 'Wickets'   ], [ 'Text', 'Canada'  ], ],
         ] ],
     });
     pass( 'no death from loading example suppliers data into VM' );
     does_ok( $src_suppliers, 'Muldis::Rosetta::Interface::Value' );
 
     my $src_foods = $process->new_value({
-        'source_code' => [ 'Relation', [
-            {
-                'food'   => [ 'Text', 'Bananas' ],
-                'colour' => [ 'Text', 'yellow' ],
-            },
-            {
-                'food'   => [ 'Text', 'Carrots' ],
-                'colour' => [ 'Text', 'orange' ],
-            },
-            {
-                'food'   => [ 'Text', 'Oranges' ],
-                'colour' => [ 'Text', 'orange' ],
-            },
-            {
-                'food'   => [ 'Text', 'Kiwis' ],
-                'colour' => [ 'Text', 'green' ],
-            },
-            {
-                'food'   => [ 'Text', 'Lemons' ],
-                'colour' => [ 'Text', 'yellow' ],
-            },
+        'source_code' => [ 'Relation', [ 'food', 'colour', ], [
+            [ [ 'Text', 'Bananas' ], [ 'Text', 'yellow' ], ],
+            [ [ 'Text', 'Carrots' ], [ 'Text', 'orange' ], ],
+            [ [ 'Text', 'Oranges' ], [ 'Text', 'orange' ], ],
+            [ [ 'Text', 'Kiwis'   ], [ 'Text', 'green'  ], ],
+            [ [ 'Text', 'Lemons'  ], [ 'Text', 'yellow' ], ],
         ] ],
     });
     pass( 'no death from loading example foods data into VM' );
@@ -168,21 +144,15 @@ sub _scenario_foods_suppliers_shipments_v1 {
     pass( 'no death from executing search query' );
     does_ok( $matched_suppl, 'Muldis::Rosetta::Interface::Value' );
 
-    my $matched_suppl_as_perl = $matched_suppl->source_code();
+    my $matched_suppl_as_perl = $matched_suppl->hd_source_code();
     pass( 'no death from fetching search results from VM' );
 
     # Finally, use the result somehow (not done here).
     # The result should be:
-    # [ 'Relation', [
-    #     {
-    #         'farm'    => [ 'Text', 'Hodgesons' ],
-    #         'country' => [ 'Text', 'Canada' ],
-    #     },
-    #     {
-    #         'farm'    => [ 'Text', 'Beckers' ],
-    #         'country' => [ 'Text', 'England' ],
-    #     },
-    # ] ]
+    # [ 'Relation', [ 'farm', 'country', ], [
+    #     [ [ 'Text', 'Hodgesons' ], [ 'Text', 'Canada'  ], ],
+    #     [ [ 'Text', 'Beckers'   ], [ 'Text', 'England' ], ],
+    # ] ],
 
     print "# debug: orange food suppliers found:\n";
 #    print "# " . $matched_suppl_as_perl->as_perl() . "\n";
@@ -265,7 +235,7 @@ A common comprehensive test suite to run against all Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Validator version 0.10.0 for Perl
+This document describes Muldis::Rosetta::Validator version 0.11.0 for Perl
 5.
 
 =head1 SYNOPSIS
@@ -353,7 +323,7 @@ Perl 5.x.y that is at least 5.10.0, and are also on CPAN for separate
 installation by users of earlier Perl versions: L<version>.
 
 It also requires these Perl 5 classes that are in the current distribution:
-L<Muldis::Rosetta::Interface-0.10.0|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface-0.11.0|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 
