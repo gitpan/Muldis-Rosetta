@@ -3,7 +3,7 @@ use utf8;
 use strict;
 use warnings FATAL => 'all';
 
-use Muldis::Rosetta::Interface 0.011000;
+use Muldis::Rosetta::Interface 0.011001;
 
 #use Muldis::Rosetta::Engine::Example::Runtime;
 #use Muldis::Rosetta::Engine::Example::Value;
@@ -14,7 +14,7 @@ use Muldis::Rosetta::Interface 0.011000;
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example; # module
-    use version 0.74; our $VERSION = qv('0.11.0');
+    use version 0.74; our $VERSION = qv('0.11.1');
     # Note: This given version applies to all of this file's packages.
 
 ###########################################################################
@@ -34,7 +34,7 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example::Public::Machine; # class
-    use Moose;
+    use Moose 0.56;
 
     with 'Muldis::Rosetta::Interface::Machine';
 
@@ -77,7 +77,7 @@ sub new_process {
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example::Public::Process; # class
-    use Moose;
+    use Moose 0.56;
 
     with 'Muldis::Rosetta::Interface::Process';
 
@@ -249,7 +249,7 @@ sub rollback_trans {
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example::Public::Value; # class
-    use Moose;
+    use Moose 0.56;
 
     with 'Muldis::Rosetta::Interface::Value';
 
@@ -355,7 +355,7 @@ Self-contained reference implementation of a Muldis Rosetta Engine
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Engine::Example version 0.11.0 for
+This document describes Muldis::Rosetta::Engine::Example version 0.11.1 for
 Perl 5.
 
 It also describes the same-number versions for Perl 5 of
@@ -439,10 +439,10 @@ Perl 5.x.y that is at least 5.10.0, and are also on CPAN for separate
 installation by users of earlier Perl versions: L<version>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<Moose-0.55|Moose>.
+L<Moose-0.56|Moose>.
 
 It also requires these Perl 5 classes that are in the current distribution:
-L<Muldis::Rosetta::Interface-0.11.0|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface-0.11.1|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 

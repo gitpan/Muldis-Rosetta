@@ -3,15 +3,16 @@ use utf8;
 use strict;
 use warnings FATAL => 'all';
 
-use Muldis::Rosetta::Interface 0.011000;
+use Muldis::Rosetta::Interface 0.011001;
 
 ###########################################################################
 ###########################################################################
 
 { package Muldis::Rosetta::Validator; # module
-    use version 0.74; our $VERSION = qv('0.11.0');
+    use version 0.74; our $VERSION = qv('0.11.1');
 
     use Test::More;
+    use Test::Moose 0.56;
 
 ###########################################################################
 
@@ -163,59 +164,6 @@ sub _scenario_foods_suppliers_shipments_v1 {
 
 ###########################################################################
 
-# Modified clone of isa_ok from Test::More,
-# since we actually want to test with does() rather than isa();
-# it is identical to the original save the s/isa/does/g and s/class/role/g;
-# this will probably be replaced later with something simple.
-
-sub does_ok ($$;$) {
-    my($object, $role, $obj_name) = @_;
-    my $tb = Test::More->builder;
-    my $diag;
-    $obj_name = 'The object' unless defined $obj_name;
-    my $name = "$obj_name does $role";
-    if( !defined $object ) {
-        $diag = "$obj_name isn't defined";
-    }
-    elsif( !ref $object ) {
-        $diag = "$obj_name isn't a reference";
-    }
-    else {
-        # We can't use UNIVERSAL::does because we want to honor does() overrides
-        my($rslt, $error) = $tb->_try(sub { $object->does($role) });
-        if( $error ) {
-            if( $error =~ /^Can't call method "does" on unblessed reference/ ) {
-                # Its an unblessed reference
-                if( !UNIVERSAL::does($object, $role) ) {
-                    my $ref = ref $object;
-                    $diag = "$obj_name isn't a '$role' it's a '$ref'";
-                }
-            } else {
-                die <<WHOA;
-WHOA! I tried to call ->does on your object and got some weird error.
-Here's the error.
-$error
-WHOA
-            }
-        }
-        elsif( !$rslt ) {
-            my $ref = ref $object;
-            $diag = "$obj_name isn't a '$role' it's a '$ref'";
-        }
-    }
-    my $ok;
-    if( $diag ) {
-        $ok = $tb->ok( 0, $name );
-        $tb->diag("    $diag\n");
-    }
-    else {
-        $ok = $tb->ok( 1, $name );
-    }
-    return $ok;
-}
-
-###########################################################################
-
 } # module Muldis::Rosetta::Validator
 
 ###########################################################################
@@ -235,7 +183,7 @@ A common comprehensive test suite to run against all Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Validator version 0.11.0 for Perl
+This document describes Muldis::Rosetta::Validator version 0.11.1 for Perl
 5.
 
 =head1 SYNOPSIS
@@ -255,6 +203,7 @@ Muldis Rosetta Engine distribution:
     Muldis::Rosetta::Validator::main({
         'engine_name' => 'Muldis::Rosetta::Engine::Example',
         'machine_config' => {},
+        'process_config' => {},
     });
 
     1;
@@ -322,8 +271,11 @@ It also requires these Perl 5 packages that are bundled with any version of
 Perl 5.x.y that is at least 5.10.0, and are also on CPAN for separate
 installation by users of earlier Perl versions: L<version>.
 
+It also requires these Perl 5 packages that are on CPAN:
+L<Test::Moose-0.56|Test::Moose>.
+
 It also requires these Perl 5 classes that are in the current distribution:
-L<Muldis::Rosetta::Interface-0.11.0|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface-0.11.1|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 
