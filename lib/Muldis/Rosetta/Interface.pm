@@ -7,29 +7,21 @@ use warnings FATAL => 'all';
 ###########################################################################
 
 { package Muldis::Rosetta::Interface; # module
-    use version 0.74; our $VERSION = qv('0.11.1');
+    use version 0.74; our $VERSION = qv('0.12.0');
     # Note: This given version applies to all of this file's packages.
 
     use Carp;
-    use Encode qw(is_utf8);
-    use Scalar::Util qw(blessed);
+    use Scalar::Util 'blessed';
 
 ###########################################################################
 
 sub new_machine {
     my ($args) = @_;
-    my ($engine_name, $machine_config)
-        = @{$args}{'engine_name', 'machine_config'};
+    my ($engine_name) = @{$args}{'engine_name'};
 
-    confess q{new_machine(): Bad :$engine_name arg; Perl 5 does not}
-            . q{ consider it to be a character str, or it's the empty str.}
-        if !defined $engine_name or $engine_name eq q{}
-            or (!is_utf8 $engine_name
-                and $engine_name =~ m/[^\x00-\x7F]/xs);
-            # TODO: also use some Encode::foo to check that the actual byte
-            # sequences are valid utf-8, in case the text value came from
-            # some bad source that just flipped the is_utf8 flag without
-            # actually first making the string valid utf8.
+    confess q{new_machine(): Bad :$engine_name arg; it is undefined}
+            . q{ or it is the empty string.}
+        if !defined $engine_name or $engine_name eq q{};
 
     # A module may be loaded due to it being embedded in a non-excl file.
     if (!do {
@@ -56,8 +48,7 @@ sub new_machine {
             . q{ does not provide the new_machine() constructor function.}
         if !$engine_name->can( 'new_machine' );
     my $machine = eval {
-        &{$engine_name->can( 'new_machine' )}({
-            'machine_config' => $machine_config });
+        &{$engine_name->can( 'new_machine' )}();
     };
     if (my $err = $@) {
         confess qq{new_machine(): Th Muldis Rosetta Eng mod '$engine_name'}
@@ -80,7 +71,7 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Interface::Machine; # role
-    use Moose::Role 0.56;
+    use Moose::Role 0.57;
 
     requires 'new_process';
 
@@ -90,7 +81,7 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Interface::Process; # role
-    use Moose::Role 0.56;
+    use Moose::Role 0.57;
 
     requires 'assoc_machine';
     requires 'pt_command_lang';
@@ -113,7 +104,7 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Interface::Value; # role
-    use Moose::Role 0.56;
+    use Moose::Role 0.57;
 
     requires 'assoc_process';
     requires 'pt_source_code';
@@ -138,7 +129,7 @@ Common public API for Muldis Rosetta Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Interface version 0.11.1 for Perl
+This document describes Muldis::Rosetta::Interface version 0.12.0 for Perl
 5.
 
 It also describes the same-number versions for Perl 5 of
@@ -158,7 +149,7 @@ a third Perl variable holding the relation data of the result.
         'engine_name' => 'Muldis::Rosetta::Engine::Example' });
     my $process = $machine->new_process();
     $process->update_hd_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.47.0', 'HDMD_Perl_Tiny', {} ] });
+        'http://muldis.com', '0.48.0', 'HDMD_Perl_Tiny', {} ] });
 
     my $r1 = $process->new_value({
         'source_code' => [ 'Relation', [ 'x', 'y', ], [
@@ -245,20 +236,19 @@ the Muldis Rosetta API.
 =over
 
 =item C<new_machine of Muldis::Rosetta::Interface::Machine (Str
-:$engine_name!, Any :$machine_config?)>
+:$engine_name!)>
 
-This constructor function creates and returns a C<Machine> object that is
-implemented by the Muldis Rosetta Engine named by its named argument
-C<$engine_name>; that object is initialized using the C<$machine_config>
-argument.  The named argument C<$engine_name> is the name of a Perl module
-that is expected to be the root package of a Muldis Rosetta Engine, and
-which is expected to declare a C<new_machine> subroutine with a single
-named argument C<$machine_config>; invoking this subroutine is expected to
-return an object of some class of the same Engine which does the
-C<Muldis::Rosetta::Interface::Machine> role.  This function will start by
-testing if the root package is already loaded (it may be declared by some
-already-loaded file of another name), and only if not, will it do a Perl
-'require' of the C<$engine_name>.
+This constructor function selects (first creating if necessary) and returns
+the singleton C<Machine> object that is implemented by the Muldis Rosetta
+Engine named by its named argument C<$engine_name>.  The named argument
+C<$engine_name> is the name of a Perl module that is expected to be the
+root package of a Muldis Rosetta Engine, and which is expected to declare a
+C<new_machine> subroutine with zero parameters; invoking this subroutine is
+expected to return an object of some class of the same Engine which does
+the C<Muldis::Rosetta::Interface::Machine> role.  This function will start
+by testing if the root package is already loaded (it may be declared by
+some already-loaded file of another name), and only if not, will it do a
+Perl 'require' of the C<$engine_name>.
 
 =back
 
@@ -269,13 +259,18 @@ machine / Muldis D environment, which is the widest scope stateful context
 in which any other database activities happen.  Other activities meaning
 the compilation and execution of Muldis D code, mounting or unmounting
 depots, performing queries, data manipulation, data definition, and
-transactions.  If a C<Machine> object is ever garbage collected by Perl
-while it has any active transactions, then those will all be rolled back,
-and then an exception thrown.
+transactions.  It is expected that a Muldis Rosetta Engine would implement
+a C<Machine> as a singleton (or behave as if it did), so only one such
+object would exist at a time in a Perl process per distinct Engine, in
+which case a C<Machine> would be a proxy for the Engine as a whole, by
+which one can act on the Engine in a "global" sense.  If a C<Machine>
+object is ever garbage collected by Perl while it has any active
+transactions, then those will all be rolled back, and then an exception
+thrown.
 
 =over
 
-=item C<new_process of Muldis::Rosetta::Interface::Process (Any
+=item C<new_process of Muldis::Rosetta::Interface::Process (Hash
 :$process_config?)>
 
 This method creates and returns a new C<Process> object that is associated
@@ -294,13 +289,12 @@ object, the one whose C<new_process> method created it.
 A new C<Process> object's "expected plain-text|Perl-hosted-data command
 language" attribute is undefined by default, meaning that each
 plain-text|Perl-hosted-data command fed to the process must declare what
-plain-text|Perl-hosted-data language it is written in, and according to
-that declaration will the command be interpreted; if that attribute was
-made defined, then plain-text|Perl-hosted-data commands fed to the process
-either must not declare their plain-text|Perl-hosted-data language or must
-declare the same plain-text|Perl-hosted-data language as the attribute, and
-so the command will be interpreted according to the expected
-plain-text|Perl-hosted-data language attribute.
+plain-text|Perl-hosted-data language it is written in; if that attribute
+was made defined, then plain-text|Perl-hosted-data commands fed to it would
+not need to declare their plain-text|Perl-hosted-data language and will be
+interpreted according to the expected plain-text|Perl-hosted-data language;
+if both the attribute is defined and the command has its own language
+declaration, then the one with the command will override the attribute.
 
 =over
 
@@ -338,7 +332,7 @@ C<Process> object's "expected Perl-hosted-data command language" attribute.
 This method dies if the specified language is defined and its value isn't
 one that the invocant's Engine knows how to or desires to handle.
 
-=item C<execute (Any :$source_code!)>
+=item C<execute (Any :$source_code!, Any :$lang?)>
 
 This method compiles and executes the (typically Muldis D) source code
 given in its C<$source_code> argument.  If C<$source_code> is a Perl Str
@@ -346,10 +340,11 @@ then it is treated as being written in a plain-text language; if
 C<$source_code> is any kind of Perl 5 reference or Perl 5 object then it is
 treated as being written in a Perl-hosted-data language.  This method dies
 if the source code fails to compile for some reason, or if the executing
-code has a runtime exception.
+code has a runtime exception.  If C<$lang> is defined, it must match
+C<$source_code> in Str vs Array|obj categorization.
 
 =item C<new_value of Muldis::Rosetta::Interface::Value (Any
-:$source_code!)>
+:$source_code!, Any :$lang?)>
 
 This method creates and returns a new C<Value> object that is associated
 with the invocant C<Process>; that C<Value> object is initialized using the
@@ -366,19 +361,29 @@ states, in order to disambiguate this kind of Perl-hosted-data code from
 plain-text code.  If the C<$source_code> is in a Perl Hosted Data language,
 then it may consist partially of other C<Value> objects.  If
 C<$source_code> is itself just a C<Value> object, then it will be cloned.
+Because a source code fragment representing a value literal typically
+doesn't embed its own declaration of the plain-text|Perl-hosted-data
+language it is written in, that language must be specified external to the
+fragment, either by giving a defined C<$lang> argument, or by ensuring that
+the invocant C<Process> object has a defined "expected
+plain-text|Perl-hosted-data command language" attribute.  If C<$lang> is
+defined, it must match C<$source_code> in Str vs Array|obj categorization.
 
 =item C<func_invo of Muldis::Rosetta::Interface::Value (Str :$function!,
-Hash :$args?)>
+Hash :$args?, Str :$pt_lang?, Array :$hd_lang?)>
 
 This method invokes the Muldis D function named by its C<$function>
 argument, giving it arguments from C<$args>, and then returning the result
 as a C<Value> object.  Each C<$args> Hash key must match the name of a
 parameter of the named function, and the corresponding Hash value is the
 argument for that parameter; each Hash value may be either a C<Value>
-object or some other Perl value that would be suitable as the sole
-constructor argument for a new C<Value> object.
+object or some other Perl value that would be suitable as the
+C<$source_code> constructor argument for a new C<Value> object; if
+C<$pt_lang> or C<$hd_lang> are defined, the appropriate one will be given
+as the C<$lang> constructor argument.
 
-=item C<upd_invo (Str :$updater!, Hash :$upd_args!, Hash :$ro_args?)>
+=item C<upd_invo (Str :$updater!, Hash :$upd_args!, Hash :$ro_args?, Str
+:$pt_lang?, Array :$hd_lang?)>
 
 This method invokes the Muldis D updater named by its C<$updater> argument,
 giving it subject-to-update arguments from C<$upd_args> and read-only
@@ -392,7 +397,8 @@ subject-to-update parameter; said Perl variable is then what holds a
 C<Value> object et al prior to the updater's execution, and that may have
 been updated to hold a different C<Value> object as a side-effect.
 
-=item C<proc_invo (Str :$procedure!, Hash :$upd_args?, Hash :$ro_args?)>
+=item C<proc_invo (Str :$procedure!, Hash :$upd_args?, Hash :$ro_args?, Str
+:$pt_lang?, Array :$hd_lang?)>
 
 This method invokes the Muldis D procedure (or system_service) named by its
 C<$procedure> argument, giving it subject-to-update arguments from
@@ -460,22 +466,19 @@ associated with.
 This method returns (typically Muldis D) plain-text source code that
 defines a value literal equivalent to the in-DBMS value that the invocant
 C<Value> represents.  The plain-text language of the source code to return
-must be explicitly specified, typically by ensuring that the C<Process>
-object associated with this C<Value> has a defined "expected plain-text
-command language" attribute; alternately a defined C<$lang> argument may be
-used, but if that argument is given while the attribute is defined, then
-the 2 values must match.
+must be explicitly specified, either by giving a defined C<$lang> argument,
+or by ensuring that the C<Process> object associated with this C<Value> has
+a defined "expected plain-text command language" attribute.
 
 =item C<hd_source_code of Any (Array :$lang?)>
 
 This method returns (typically Muldis D) Perl-hosted-data source code that
 defines a value literal equivalent to the in-DBMS value that the invocant
 C<Value> represents.  The Perl-hosted-data language of the source code to
-return must be explicitly specified, typically by ensuring that the
-C<Process> object associated with this C<Value> has a defined "expected
-Perl-hosted-data command language" attribute; alternately a defined
-C<$lang> argument may be used, but if that argument is given while the
-attribute is defined, then the 2 values must match.
+return must be explicitly specified, either by giving a defined C<$lang>
+argument, or by ensuring that the C<Process> object associated with this
+C<Value> has a defined "expected Perl-hosted-data command language"
+attribute.
 
 =back
 
@@ -494,10 +497,10 @@ recommends one that is at least 5.10.0.
 
 It also requires these Perl 5 packages that are bundled with any version of
 Perl 5.x.y that is at least 5.10.0, and are also on CPAN for separate
-installation by users of earlier Perl versions: L<version>.
+installation by users of earlier Perl versions: L<version-0.74|version>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<Moose::Role-0.56|Moose::Role>.
+L<Moose::Role-0.57|Moose::Role>.
 
 =head1 INCOMPATIBILITIES
 
@@ -511,14 +514,12 @@ distribution-external references.
 
 =head1 BUGS AND LIMITATIONS
 
-The Muldis Rosetta framework for Perl 5 is built according to certain
-old-school or traditional Perl-5-land design principles, including that
-there are no explicit attempts in code to enforce privacy of the
-framework's internals, besides not documenting them as part of the public
-API.  (The Muldis Rosetta framework for Perl 6 is different.)  That said,
-you should still respect that privacy and just use the public API that
-Muldis Rosetta provides.  If you bypass the public API anyway, as Perl 5
-allows, you do so at your own peril.
+The Muldis Rosetta framework for Perl 5 does not make explicit attempts in
+code to enforce privacy of the framework's internals, besides not
+documenting them as part of the public API.  (The Muldis Rosetta framework
+for Perl 6 is different.)  That said, you should still respect that privacy
+and just use the public API that Muldis Rosetta provides.  If you bypass
+the public API anyway, as Perl 5 allows, you do so at your own peril.
 
 I<This documentation is pending.>
 

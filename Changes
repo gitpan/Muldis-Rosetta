@@ -1,6 +1,89 @@
                               Muldis::Rosetta
 ---------------------------------------------------------------------------
 
+2008-09-19   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis Rosetta version 0.12.0 for Perl 5 is released on CPAN as
+    Muldis-Rosetta-0.12.0.tar.gz.  Muldis Rosetta version 0.12.0 for Perl 6
+    is not released at all.  The rest of this Changes entry refers only to
+    the Perl 5 version, and it should not be assumed that the Perl 6
+    version incorporates all of said updates, though it may have some of
+    them.
+
+    * Updated the README file to indicate that a new public repository at
+    http://github.com/muldis/ is planned for the near future.
+
+    * New file versions are: Rosetta.pm and Interface.pm and Validator.pm
+    and Example.pm 0.12.0.  The other pre-existing versioned files are
+    unchanged.
+
+    * (Interface.pm)  The new_machine routine no longer tries to validate
+    its $engine_name argument as to whether or not Perl 5 considers it to
+    be a valid character string; the argument is now only validated for
+    definedness and non-empty-ness.  It turns out that there isn't really
+    any effective Perl 5 test for whether an arbitrary string argument is
+    text, and it is really just up to the code that exchanges data with the
+    outside world (files, networks, databases, etc) to ensure it is using
+    Encode's decode() and encode() etc when it should be; so for us, worst
+    case is we interpret the string as the wrong characters, due to our
+    caller making a mistake, and it is up to them to fix it.  Note, this
+    all being said, any future routine that expects a binary string
+    argument can still assert that is_utf8() is false as a validation step.
+
+    * (Interface.pm, Example.pm, Validator.pm,
+    Muldis_Rosetta_50_Validate_Example.t)  The Machine role|class
+    constructor submethod no longer has any parameters, and the new_machine
+    constructor wrapper functions now have just the single 'engine_name'
+    parameter; they all, as well as the 'main' procedure of Validator.pm,
+    no longer have a 'machine_config' parameter.  From now on, if a Machine
+    would have any config options of its own, they will be set using
+    accessors on a Machine object rather than in its constructor.  Also
+    updated the corresponding 'process_config' parameter for the Process
+    role|class and its wrappers, restricting it such that it must be a Perl
+    Hash (or be undefined), rather than Interface.pm saying it may be
+    anything and be up to each Engine to restrict its own way.
+
+    * (Interface.pm, Example.pm)  The Machine role|class is now a
+    singleton, such that each Muldis Rosetta Engine may only have one
+    Machine object per Perl process, and that Machine thus serves as a
+    proxy for the Engine as a whole, any methods on it being "global";
+    updated the Interface.pm docs to say so.  To help implement this in
+    Example.pm, added external dependency on MooseX::Singleton, which now
+    provides the metaclass for Example's Machine class rather than just
+    Moose doing that.
+
+    * (Interface.pm)  In a reversal of one aspect of release 0.11.0,
+    updated the API documentation so it no longer says that a Process
+    object's defined "expected pt|hd command language" attribute will take
+    precedence over a declared language name used per command; so it is now
+    the case that the most local defined language declaration will take
+    precedence when it might conceivably be applicable; but the
+    documentation now mainly just implies that fact rather than explicitly
+    stating it, since typical user intuition should point to the truth.
+
+    * (Interface.pm, Example.pm)  Updated the Process|Value role|class so
+    that all routines with a 'source_code' parameter (that is, 'execute',
+    'new_value', the 3 'invo') now have an extra 1 or 2 optional parameters
+    named 'lang' or '(pt|hd)_lang'.  In the case of all Interface::Value
+    construction, either direct ('new_value') or indirect (from ro-args of
+    the 3 'invo'), it turns out that 'source_code' typically can't embed a
+    language declaration after all (what the previous API assumed), and so
+    the new parameters allow a per-source language declaration to be
+    supplied; so it is now mandatory for each source to get a language
+    declaration either from the new parameter or from the invocant Process'
+    expected language attribute, except when the source is already a Value
+    object.  In the case of 'execute', typically its 'source_code' *can*
+    embed a language declaration, and if it does then an external supply as
+    per Value construction isn't needed.
+
+    * (Example.pm)  Under the DESCRIPTION main pod section, added pod
+    sub-section "Implementation and Limitations" which has a few details
+    about broad design decisions that go into the Example Engine, such as
+    how its implementation uses the SQLite DBMS as a model, loosely
+    speaking, and that it is mainly a RAM-based DBMS.  Also added an
+    initial something to the BUGS AND LIMITATIONS main pod section, and
+    updated the INTERFACE section.
+
 2008-09-03   Darren Duncan <perl@DarrenDuncan.net>
 
     * Muldis Rosetta version 0.11.1 for Perl 5 is released on CPAN as

@@ -3,23 +3,23 @@ use utf8;
 use strict;
 use warnings FATAL => 'all';
 
-use Muldis::Rosetta::Interface 0.011001;
+use Muldis::Rosetta::Interface 0.012000;
 
 ###########################################################################
 ###########################################################################
 
 { package Muldis::Rosetta::Validator; # module
-    use version 0.74; our $VERSION = qv('0.11.1');
+    use version 0.74; our $VERSION = qv('0.12.0');
 
     use Test::More;
-    use Test::Moose 0.56;
+    use Test::Moose 0.57;
 
 ###########################################################################
 
 sub main {
     my ($args) = @_;
-    my ($engine_name, $machine_config, $process_config)
-        = @{$args}{'engine_name', 'machine_config', 'process_config'};
+    my ($engine_name, $process_config)
+        = @{$args}{'engine_name', 'process_config'};
 
     plan( 'tests' => 13 );
 
@@ -29,7 +29,6 @@ sub main {
     # Instantiate a Muldis Rosetta DBMS / virtual machine.
     my $machine = Muldis::Rosetta::Interface::new_machine({
         'engine_name' => $engine_name,
-        'machine_config' => $machine_config,
     });
     does_ok( $machine, 'Muldis::Rosetta::Interface::Machine' );
     my $process = $machine->new_process({
@@ -37,7 +36,7 @@ sub main {
     });
     does_ok( $process, 'Muldis::Rosetta::Interface::Process' );
     $process->update_hd_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.47.0', 'HDMD_Perl_Tiny', {} ] });
+        'http://muldis.com', '0.48.0', 'HDMD_Perl_Tiny', {} ] });
 
     _scenario_foods_suppliers_shipments_v1( $process );
 
@@ -183,7 +182,7 @@ A common comprehensive test suite to run against all Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Validator version 0.11.1 for Perl
+This document describes Muldis::Rosetta::Validator version 0.12.0 for Perl
 5.
 
 =head1 SYNOPSIS
@@ -202,7 +201,6 @@ Muldis Rosetta Engine distribution:
     # Run the test suite.
     Muldis::Rosetta::Validator::main({
         'engine_name' => 'Muldis::Rosetta::Engine::Example',
-        'machine_config' => {},
         'process_config' => {},
     });
 
@@ -269,13 +267,13 @@ recommends one that is at least 5.10.0.
 
 It also requires these Perl 5 packages that are bundled with any version of
 Perl 5.x.y that is at least 5.10.0, and are also on CPAN for separate
-installation by users of earlier Perl versions: L<version>.
+installation by users of earlier Perl versions: L<version-0.74|version>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<Test::Moose-0.56|Test::Moose>.
+L<Test::Moose-0.57|Test::Moose>.
 
 It also requires these Perl 5 classes that are in the current distribution:
-L<Muldis::Rosetta::Interface-0.11.1|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface-0.12.0|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 
