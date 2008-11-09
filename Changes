@@ -1,6 +1,36 @@
                               Muldis::Rosetta
 ---------------------------------------------------------------------------
 
+2008-11-08   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Muldis Rosetta version 0.13.0 for Perl 5 is released on CPAN as
+    Muldis-Rosetta-0.13.0.tar.gz.  Muldis Rosetta version 0.13.0 for Perl 6
+    is not released at all.  The rest of this Changes entry refers only to
+    the Perl 5 version, and it should not be assumed that the Perl 6
+    version incorporates all of said updates, though it may have some of
+    them.
+
+    * New file versions are: Rosetta.pm and Interface.pm and Validator.pm
+    and Example.pm 0.13.0 and SeeAlso.pod 0.5.2.  The other pre-existing
+    versioned files are unchanged.
+
+    * (Interface.pm)  Updated the API documentation (specifically for the
+    'new_value' method) so it no longer says that a Perl-hosted-data
+    "Cat.Name" literal requires special handling as a Perl scalar ref; in
+    accordance with the latest Muldis D spec, such a literal is now given
+    as a Perl Array just like all other hosted-data literals.  Technically
+    this detail only concerned the HDMD_Perl_Tiny official Muldis D
+    dialect, and other HD dialects may have their own rules.
+
+    * (Interface.pm, Validator.pm)  Updated the example|test Muldis D code,
+    in accordance with the latest Muldis D spec; removed any 'perl_int'
+    format-specifier elements from value literals.
+
+    * (Interface.pm, Validator.pm, Example.pm)  Updated the formatting of
+    module versions in DEPENDENCIES pod sections to reflect modern Perl 6.
+
+    * (SeeAlso.pod)  Minor updates.
+
 2008-09-19   Darren Duncan <perl@DarrenDuncan.net>
 
     * Muldis Rosetta version 0.12.0 for Perl 5 is released on CPAN as

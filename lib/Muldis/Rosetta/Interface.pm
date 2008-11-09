@@ -7,7 +7,7 @@ use warnings FATAL => 'all';
 ###########################################################################
 
 { package Muldis::Rosetta::Interface; # module
-    use version 0.74; our $VERSION = qv('0.12.0');
+    use version 0.74; our $VERSION = qv('0.13.0');
     # Note: This given version applies to all of this file's packages.
 
     use Carp;
@@ -71,7 +71,7 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Interface::Machine; # role
-    use Moose::Role 0.57;
+    use Moose::Role 0.61;
 
     requires 'new_process';
 
@@ -81,7 +81,7 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Interface::Process; # role
-    use Moose::Role 0.57;
+    use Moose::Role 0.61;
 
     requires 'assoc_machine';
     requires 'pt_command_lang';
@@ -104,7 +104,7 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Interface::Value; # role
-    use Moose::Role 0.57;
+    use Moose::Role 0.61;
 
     requires 'assoc_process';
     requires 'pt_source_code';
@@ -129,7 +129,7 @@ Common public API for Muldis Rosetta Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Interface version 0.12.0 for Perl
+This document describes Muldis::Rosetta::Interface version 0.13.0 for Perl
 5.
 
 It also describes the same-number versions for Perl 5 of
@@ -149,20 +149,20 @@ a third Perl variable holding the relation data of the result.
         'engine_name' => 'Muldis::Rosetta::Engine::Example' });
     my $process = $machine->new_process();
     $process->update_hd_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.48.0', 'HDMD_Perl_Tiny', {} ] });
+        'http://muldis.com', '0.50.0', 'HDMD_Perl_Tiny', {} ] });
 
     my $r1 = $process->new_value({
-        'source_code' => [ 'Relation', [ 'x', 'y', ], [
-            [ [ 'Int', 'perl_int', 4 ], [ 'Int', 'perl_int', 7 ], ],
-            [ [ 'Int', 'perl_int', 3 ], [ 'Int', 'perl_int', 2 ], ],
+        'source_code' => [ 'Relation', [ 'x', 'y' ], [
+            [ [ 'Int', 4 ], [ 'Int', 7 ] ],
+            [ [ 'Int', 3 ], [ 'Int', 2 ] ],
         ] ]
     });
 
     my $r2 = $process->new_value({
-        'source_code' => [ 'Relation', [ 'y', 'z', ], [
-            [ [ 'Int', 'perl_int', 5 ], [ 'Int', 'perl_int', 6 ], ],
-            [ [ 'Int', 'perl_int', 2 ], [ 'Int', 'perl_int', 1 ], ],
-            [ [ 'Int', 'perl_int', 2 ], [ 'Int', 'perl_int', 4 ], ],
+        'source_code' => [ 'Relation', [ 'y', 'z' ], [
+            [ [ 'Int', 5 ], [ 'Int', 6 ] ],
+            [ [ 'Int', 2 ], [ 'Int', 1 ] ],
+            [ [ 'Int', 2 ], [ 'Int', 4 ] ],
         ] ]
     });
 
@@ -176,17 +176,9 @@ a third Perl variable holding the relation data of the result.
     my $r3_as_perl = $r3->hd_source_code();
 
     # Then $r3_as_perl contains:
-    # [ 'Relation', [
-    #     {
-    #         'x' => [ 'Int', 'perl_int', 3 ],
-    #         'y' => [ 'Int', 'perl_int', 2 ],
-    #         'z' => [ 'Int', 'perl_int', 1 ],
-    #     },
-    #     {
-    #         'x' => [ 'Int', 'perl_int', 3 ],
-    #         'y' => [ 'Int', 'perl_int', 2 ],
-    #         'z' => [ 'Int', 'perl_int', 4 ],
-    #     },
+    # [ 'Relation', [ 'x', 'y', 'z' ], [
+    #     [ [ 'Int', 3 ], [ 'Int', 2 ], [ 'Int', 1 ] ],
+    #     [ [ 'Int', 3 ], [ 'Int', 2 ], [ 'Int', 4 ] ],
     # ] ]
 
 For most examples of using Muldis Rosetta, and tutorials, please see the
@@ -352,22 +344,17 @@ with the invocant C<Process>; that C<Value> object is initialized using the
 which defines a value literal.  If C<$source_code> is a Perl Str then it is
 treated as being written in a plain-text language; if C<$source_code> is
 any kind of Perl 5 reference or Perl 5 object then it is treated as being
-written in a Perl-hosted-data language.  If C<$source_code> is written in
-Perl Hosted Muldis D, it would typically be a Perl (ordered) Array; but if
-one wants to declare a C<Value> in that language that is just a Muldis D
-C<Cat.Name>, then C<$source_code> must be a Perl 5 scalar reference to a
-Perl Str rather than just being a Perl Str as the Perl Hosted Muldis D spec
-states, in order to disambiguate this kind of Perl-hosted-data code from
-plain-text code.  If the C<$source_code> is in a Perl Hosted Data language,
-then it may consist partially of other C<Value> objects.  If
-C<$source_code> is itself just a C<Value> object, then it will be cloned.
-Because a source code fragment representing a value literal typically
-doesn't embed its own declaration of the plain-text|Perl-hosted-data
-language it is written in, that language must be specified external to the
-fragment, either by giving a defined C<$lang> argument, or by ensuring that
-the invocant C<Process> object has a defined "expected
-plain-text|Perl-hosted-data command language" attribute.  If C<$lang> is
-defined, it must match C<$source_code> in Str vs Array|obj categorization.
+written in a Perl-hosted-data language.  If the C<$source_code> is in a
+Perl Hosted Data language, then it may consist partially of other C<Value>
+objects.  If C<$source_code> is itself just a C<Value> object, then it will
+be cloned.  Because a source code fragment representing a value literal
+typically doesn't embed its own declaration of the
+plain-text|Perl-hosted-data language it is written in, that language must
+be specified external to the fragment, either by giving a defined C<$lang>
+argument, or by ensuring that the invocant C<Process> object has a defined
+"expected plain-text|Perl-hosted-data command language" attribute.  If
+C<$lang> is defined, it must match C<$source_code> in Str vs Array|obj
+categorization.
 
 =item C<func_invo of Muldis::Rosetta::Interface::Value (Str :$function!,
 Hash :$args?, Str :$pt_lang?, Array :$hd_lang?)>
@@ -497,10 +484,11 @@ recommends one that is at least 5.10.0.
 
 It also requires these Perl 5 packages that are bundled with any version of
 Perl 5.x.y that is at least 5.10.0, and are also on CPAN for separate
-installation by users of earlier Perl versions: L<version-0.74|version>.
+installation by users of earlier Perl versions:
+L<version:ver(0.74..*)|version>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<Moose::Role-0.57|Moose::Role>.
+L<Moose::Role:ver(0.61..*)|Moose::Role>.
 
 =head1 INCOMPATIBILITIES
 

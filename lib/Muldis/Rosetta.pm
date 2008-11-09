@@ -7,7 +7,7 @@ use warnings FATAL => 'all';
 ###########################################################################
 
 { package Muldis::Rosetta; # package
-    use version 0.74; our $VERSION = qv('0.12.0');
+    use version 0.74; our $VERSION = qv('0.13.0');
     # Note that Perl code only exists at all in this file in order to help
     # the CPAN indexer handle the distribution properly.
 } # package Muldis::Rosetta
@@ -29,7 +29,7 @@ Full-featured truly relational DBMS in Perl
 
 =head1 VERSION
 
-This document is Muldis::Rosetta version 0.12.0.
+This document is Muldis::Rosetta version 0.13.0.
 
 =head1 DESCRIPTION
 
@@ -145,12 +145,12 @@ external resources.>
 Muldis Rosetta does not use any dialect of SQL in its native API (unlike
 many other DBMS products) because SQL is more ambiguous and error-prone to
 use, and it is less expressive.  While Muldis D is very different from SQL,
-it is fully capable of modeling anything in the real world accurately, and
-it can support a complete SQL emulation layer on top of it, so that your
-legacy applications can be migrated to use the Muldis Rosetta DBMS with
-little trouble.  Likewise, emulation layers for any other programming
-language can be supported, such as B<Tutorial D> or XQuery or FoxPro or
-dBase.
+it is fully capable of modeling any statements about anything in the real
+world accurately, and it can support a complete SQL emulation layer on top
+of it, so that your legacy applications can be migrated to use the Muldis
+Rosetta DBMS with little trouble.  Likewise, emulation layers for any other
+programming language can be supported, such as B<Tutorial D> or XQuery or
+FoxPro or dBase.
 
 One distinctive feature of a Muldis Rosetta DBMS (compared to a typical
 other vendor's DBMS) is that data definition statements are structured

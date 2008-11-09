@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Muldis-Rosetta
-version:             0.12.0
+version:             0.13.0
 abstract:            Full-featured truly relational DBMS in Perl
 license:             lgpl
 author:              
@@ -8,10 +8,10 @@ author:
 generated_by:        ExtUtils::MakeMaker version 6.42
 distribution_type:   module
 requires:     
-    Moose:                         0.57
-    Moose::Role:                   0.57
-    MooseX::Singleton:             0.11
-    Test::Moose:                   0.57
+    Moose:                         0.61
+    Moose::Role:                   0.61
+    MooseX::Singleton:             0.12
+    Test::Moose:                   0.61
     version:                       0.74
 meta-spec:
     url:     http://module-build.sourceforge.net/META-spec-v1.3.html

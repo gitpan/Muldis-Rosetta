@@ -3,10 +3,13 @@ use utf8;
 use strict;
 use warnings FATAL => 'all';
 
-use Muldis::Rosetta::Interface 0.012000;
+use Muldis::Rosetta::Interface 0.013000;
 
-#use Muldis::Rosetta::Engine::Example::Runtime 0.000000;
 #use Muldis::Rosetta::Engine::Example::Value 0.000000;
+#use Muldis::Rosetta::Engine::Example::Routines 0.000000;
+#use Muldis::Rosetta::Engine::Example::Storage 0.000000;
+#use Muldis::Rosetta::Engine::Example::Runtime 0.000000;
+#use Muldis::Rosetta::Engine::Example::Util 0.000000;
 #use Muldis::Rosetta::Engine::Example::PlainText 0.000000;
 #use Muldis::Rosetta::Engine::Example::HostedData 0.000000;
 
@@ -14,7 +17,7 @@ use Muldis::Rosetta::Interface 0.012000;
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example; # module
-    use version 0.74; our $VERSION = qv('0.12.0');
+    use version 0.74; our $VERSION = qv('0.13.0');
     # Note: This given version applies to all of this file's packages.
 
 ###########################################################################
@@ -31,7 +34,7 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example::Public::Machine; # class
-    use MooseX::Singleton 0.11;
+    use MooseX::Singleton 0.12;
 
     with 'Muldis::Rosetta::Interface::Machine';
 
@@ -61,7 +64,7 @@ sub new_process {
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example::Public::Process; # class
-    use Moose 0.57;
+    use Moose 0.61;
 
     with 'Muldis::Rosetta::Interface::Process';
 
@@ -163,6 +166,24 @@ sub execute {
 
     # TODO: parse $source_code into $boot_call_seq
 
+#    if (ref $source_code) {
+#        $boot_call_seq = Muldis::Rosetta::Engine::Example::HostedData
+#                ->boot_call_seq_from_source_code({
+#            'assoc_process' => $self->_inner(),
+#            'source_code' => $source_code,
+#            'exp_command_lang' => $self->_hd_command_lang(),
+#        });
+#    }
+
+#    else {
+#        $boot_call_seq = Muldis::Rosetta::Engine::Example::PlainText
+#                ->boot_call_seq_from_source_code({
+#            'assoc_process' => $self->_inner(),
+#            'source_code' => $source_code,
+#            'exp_command_lang' => $self->_pt_command_lang(),
+#        });
+#    }
+
     # TODO: execute $boot_call_seq
 
     return;
@@ -246,7 +267,7 @@ sub rollback_trans {
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example::Public::Value; # class
-    use Moose 0.57;
+    use Moose 0.61;
 
     with 'Muldis::Rosetta::Interface::Value';
 
@@ -355,7 +376,7 @@ Self-contained reference implementation of a Muldis Rosetta Engine
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Engine::Example version 0.12.0 for
+This document describes Muldis::Rosetta::Engine::Example version 0.13.0 for
 Perl 5.
 
 It also describes the same-number versions for Perl 5 of
@@ -482,16 +503,16 @@ Example written in any of the following:
 See L<Muldis::D::Dialect::PTMD_Tiny> for details.
 
 The language name is specified as a Perl character string whose value is
-C<Muldis_D:'http://muldis.com':'0.48.0':'PTMD_Tiny':{...}>.  No other
-version numbers are currently supported.
+C<Muldis_D:'http://muldis.com':'0.50.0':PTMD_Tiny>.  No other version
+numbers are currently supported.
 
 =item B<Tiny Perl Hosted Data Muldis D>
 
 See L<Muldis::D::Dialect::HDMD_Perl_Tiny> for details.
 
 The language name is specified either as a Perl array whose value is C<[
-'Muldis_D', 'http://muldis.com', '0.48.0', 'HDMD_Perl_Tiny', {...} ]>.  No
-other version numbers are currently supported.
+'Muldis_D', 'http://muldis.com', '0.50.0', 'HDMD_Perl_Tiny' ]>.  No other
+version numbers are currently supported.
 
 =back
 
@@ -514,14 +535,15 @@ recommends one that is at least 5.10.0.
 
 It also requires these Perl 5 packages that are bundled with any version of
 Perl 5.x.y that is at least 5.10.0, and are also on CPAN for separate
-installation by users of earlier Perl versions: L<version-0.74|version>.
+installation by users of earlier Perl versions:
+L<version:ver(0.74..*)|version>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<Moose-0.57|Moose>, L<Moose::Role-0.57|Moose::Role>,
-L<MooseX::Singleton-0.11|MooseX::Singleton>.
+L<Moose:ver(0.61..*)|Moose>, L<Moose::Role:ver(0.61..*)|Moose::Role>,
+L<MooseX::Singleton:ver(0.12..*)|MooseX::Singleton>.
 
 It also requires these Perl 5 classes that are in the current distribution:
-L<Muldis::Rosetta::Interface-0.12.0|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface:ver(0.13.0..*)|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 
