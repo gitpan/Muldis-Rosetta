@@ -7,7 +7,7 @@ use warnings FATAL => 'all';
 ###########################################################################
 
 { package Muldis::Rosetta::Interface; # module
-    use version 0.74; our $VERSION = qv('0.13.0');
+    use version 0.74; our $VERSION = qv('0.13.1');
     # Note: This given version applies to all of this file's packages.
 
     use Carp;
@@ -71,7 +71,7 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Interface::Machine; # role
-    use Moose::Role 0.61;
+    use Moose::Role 0.65;
 
     requires 'new_process';
 
@@ -81,7 +81,7 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Interface::Process; # role
-    use Moose::Role 0.61;
+    use Moose::Role 0.65;
 
     requires 'assoc_machine';
     requires 'pt_command_lang';
@@ -104,7 +104,7 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Interface::Value; # role
-    use Moose::Role 0.61;
+    use Moose::Role 0.65;
 
     requires 'assoc_process';
     requires 'pt_source_code';
@@ -129,7 +129,7 @@ Common public API for Muldis Rosetta Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Interface version 0.13.0 for Perl
+This document describes Muldis::Rosetta::Interface version 0.13.1 for Perl
 5.
 
 It also describes the same-number versions for Perl 5 of
@@ -149,37 +149,37 @@ a third Perl variable holding the relation data of the result.
         'engine_name' => 'Muldis::Rosetta::Engine::Example' });
     my $process = $machine->new_process();
     $process->update_hd_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.50.0', 'HDMD_Perl_Tiny', {} ] });
+        'http://muldis.com', '0.58.0', 'HDMD_Perl5_Tiny', {} ] });
 
     my $r1 = $process->new_value({
-        'source_code' => [ 'Relation', [ 'x', 'y' ], [
+        'source_code' => [ 'Relation', [ [ 'x', 'y' ], [
             [ [ 'Int', 4 ], [ 'Int', 7 ] ],
             [ [ 'Int', 3 ], [ 'Int', 2 ] ],
-        ] ]
+        ] ] ]
     });
 
     my $r2 = $process->new_value({
-        'source_code' => [ 'Relation', [ 'y', 'z' ], [
+        'source_code' => [ 'Relation', [ [ 'y', 'z' ], [
             [ [ 'Int', 5 ], [ 'Int', 6 ] ],
             [ [ 'Int', 2 ], [ 'Int', 1 ] ],
             [ [ 'Int', 2 ], [ 'Int', 4 ] ],
-        ] ]
+        ] ] ]
     });
 
     my $r3 = $process->func_invo({
-        'function' => 'sys.std.Core.Relation.join',
+        'function' => 'sys.std.Core.QRelation.join',
         'args' => {
-            'topic' => [ 'QuasiSet', [ $r1, $r2 ] ],
+            'topic' => [ 'QSet', [ $r1, $r2 ] ],
         }
     });
 
     my $r3_as_perl = $r3->hd_source_code();
 
     # Then $r3_as_perl contains:
-    # [ 'Relation', [ 'x', 'y', 'z' ], [
+    # [ 'Relation', [ [ 'x', 'y', 'z' ], [
     #     [ [ 'Int', 3 ], [ 'Int', 2 ], [ 'Int', 1 ] ],
     #     [ [ 'Int', 3 ], [ 'Int', 2 ], [ 'Int', 4 ] ],
-    # ] ]
+    # ] ] ]
 
 For most examples of using Muldis Rosetta, and tutorials, please see the
 separate L<Muldis::Rosetta::Cookbook> distribution (when that comes to
@@ -404,7 +404,7 @@ auto-committing every successful Muldis D statement.  Each call of
 C<start_trans> will increase the nesting level by one, and each
 C<commit_trans> or C<rollback_trans> will decrease it by one (it can't be
 decreased below zero).  Note that all transactions started or ended within
-Muldis D code (except direct boot_call transaction management) are attached
+Muldis D code (except direct boot_stmt transaction management) are attached
 to a particular lexical scope in the Muldis D code (specifically a
 "try/catch" context), and so they will never have any effect on the nest
 level that Perl sees (assuming that a Muldis D host language will never be
@@ -485,10 +485,10 @@ recommends one that is at least 5.10.0.
 It also requires these Perl 5 packages that are bundled with any version of
 Perl 5.x.y that is at least 5.10.0, and are also on CPAN for separate
 installation by users of earlier Perl versions:
-L<version:ver(0.74..*)|version>.
+L<version-ver(0.74..*)|version>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<Moose::Role:ver(0.61..*)|Moose::Role>.
+L<Moose::Role-ver(0.65..*)|Moose::Role>.
 
 =head1 INCOMPATIBILITIES
 
@@ -519,7 +519,7 @@ Darren Duncan (C<perl@DarrenDuncan.net>)
 
 This file is part of the Muldis Rosetta framework.
 
-Muldis Rosetta is Copyright © 2002-2008, Darren Duncan.
+Muldis Rosetta is Copyright © 2002-2009, Darren Duncan.
 
 See the LICENSE AND COPYRIGHT of L<Muldis::Rosetta> for details.
 

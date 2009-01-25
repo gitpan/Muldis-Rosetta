@@ -7,7 +7,7 @@ use warnings FATAL => 'all';
 ###########################################################################
 
 { package Muldis::Rosetta; # package
-    use version 0.74; our $VERSION = qv('0.13.0');
+    use version 0.74; our $VERSION = qv('0.13.1');
     # Note that Perl code only exists at all in this file in order to help
     # the CPAN indexer handle the distribution properly.
 } # package Muldis::Rosetta
@@ -29,7 +29,7 @@ Full-featured truly relational DBMS in Perl
 
 =head1 VERSION
 
-This document is Muldis::Rosetta version 0.13.0.
+This document is Muldis::Rosetta version 0.13.1.
 
 =head1 DESCRIPTION
 
@@ -175,7 +175,7 @@ Most of the other (near term) third party Engines will likely just map
 Muldis Rosetta's rigorously defined API onto a pre-existing
 quasi-relational database manager (such as SQLite, PostgreSQL, MySQL,
 Firebird, Teradata, Oracle, Sybase, SQL Server, Informix, DB2, OpenBase,
-FrontBase, etc). Given this fact, Muldis Rosetta's most prominent feature
+FrontBase, etc).  Given this fact, Muldis Rosetta's most prominent feature
 is that it provides a common API for access to those databases, each of
 which takes a different SQL or quasi-SQL dialect.  An application written
 to it should easily port to alternative relational database engines with
@@ -259,7 +259,7 @@ Darren Duncan (C<perl@DarrenDuncan.net>)
 
 This file is part of the Muldis Rosetta framework.
 
-Muldis Rosetta is Copyright © 2002-2008, Darren Duncan.  All rights
+Muldis Rosetta is Copyright © 2002-2009, Darren Duncan.  All rights
 reserved.
 
 Muldis Rosetta is free software; you can redistribute it and/or modify it
@@ -342,9 +342,10 @@ None yet.
 
 Several public email-based forums exist whose main topic is all
 implementations of the L<Muldis D|Muldis::D> language, especially the
-L<Muldis Rosetta|Muldis::Rosetta> reference implementation.  All of these
-you can reach via L<http://mm.DarrenDuncan.net/mailman/listinfo>; go there
-to manage your subscriptions to, or view the archives of, the following:
+L<Muldis Rosetta|Muldis::Rosetta> reference implementation, but also the
+L<Set::Relation> module.  All of these you can reach via
+L<http://mm.DarrenDuncan.net/mailman/listinfo>; go there to manage your
+subscriptions to, or view the archives of, the following:
 
 =over
 
