@@ -17,8 +17,10 @@ use Muldis::Rosetta::Interface 0.013001;
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example; # module
-    use version 0.74; our $VERSION = qv('0.13.1');
+    use version 0.74; our $VERSION = qv('0.13.2');
     # Note: This given version applies to all of this file's packages.
+
+    use namespace::clean;
 
 ###########################################################################
 
@@ -34,7 +36,10 @@ sub new_machine {
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example::Public::Machine; # class
+
     use MooseX::Singleton 0.14;
+
+    use namespace::clean -except => 'meta';
 
     with 'Muldis::Rosetta::Interface::Machine';
 
@@ -58,13 +63,17 @@ sub new_process {
 ###########################################################################
 
     __PACKAGE__->meta()->make_immutable();
+
 } # class Muldis::Rosetta::Engine::Example::Public::Machine
 
 ###########################################################################
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example::Public::Process; # class
-    use Moose 0.65;
+
+    use Moose 0.68;
+
+    use namespace::clean -except => 'meta';
 
     has 'assoc_machine' => (
         is       => 'ro',
@@ -225,13 +234,17 @@ sub proc_invo {
 ###########################################################################
 
     __PACKAGE__->meta()->make_immutable();
+
 } # class Muldis::Rosetta::Engine::Example::Public::Process
 
 ###########################################################################
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example::Public::Value; # class
-    use Moose 0.65;
+
+    use Moose 0.68;
+
+    use namespace::clean -except => 'meta';
 
     has 'assoc_process' => (
         is       => 'ro',
@@ -315,6 +328,7 @@ sub hd_source_code {
 ###########################################################################
 
     __PACKAGE__->meta()->make_immutable();
+
 } # class Muldis::Rosetta::Engine::Example::Public::Value
 
 ###########################################################################
@@ -334,7 +348,7 @@ Self-contained reference implementation of a Muldis Rosetta Engine
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Engine::Example version 0.13.1 for
+This document describes Muldis::Rosetta::Engine::Example version 0.13.2 for
 Perl 5.
 
 It also describes the same-number versions for Perl 5 of
@@ -461,7 +475,7 @@ Example written in any of the following:
 See L<Muldis::D::Dialect::PTMD_Tiny> for details.
 
 The language name is specified as a Perl character string whose value is
-C<Muldis_D:'http://muldis.com':'0.58.0':PTMD_Tiny>.  No other version
+C<Muldis_D:'http://muldis.com':'0.59.1':PTMD_Tiny>.  No other version
 numbers are currently supported.
 
 =item B<Tiny Perl Hosted Data Muldis D>
@@ -469,7 +483,7 @@ numbers are currently supported.
 See L<Muldis::D::Dialect::HDMD_Perl5_Tiny> for details.
 
 The language name is specified either as a Perl array whose value is C<[
-'Muldis_D', 'http://muldis.com', '0.58.0', 'HDMD_Perl5_Tiny' ]>.  No other
+'Muldis_D', 'http://muldis.com', '0.59.1', 'HDMD_Perl5_Tiny' ]>.  No other
 version numbers are currently supported.
 
 =back
@@ -497,11 +511,12 @@ installation by users of earlier Perl versions:
 L<version-ver(0.74..*)|version>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<Moose-ver(0.65..*)|Moose>, L<Moose::Role-ver(0.65..*)|Moose::Role>,
+L<namespace::clean-ver(0.09..*)|namespace::clean>,
+L<Moose-ver(0.68..*)|Moose>, L<Moose::Role-ver(0.68..*)|Moose::Role>,
 L<MooseX::Singleton-ver(0.14..*)|MooseX::Singleton>.
 
 It also requires these Perl 5 classes that are in the current distribution:
-L<Muldis::Rosetta::Interface-ver(0.13.1..*)|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface-ver(0.13.2..*)|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 
@@ -547,7 +562,7 @@ Darren Duncan (C<perl@DarrenDuncan.net>)
 
 This file is part of the Muldis Rosetta framework.
 
-Muldis Rosetta is Copyright © 2002-2009, Darren Duncan.
+Muldis Rosetta is Copyright © 2002-2009, Muldis Data Systems, Inc.
 
 See the LICENSE AND COPYRIGHT of L<Muldis::Rosetta> for details.
 

@@ -9,10 +9,12 @@ use Muldis::Rosetta::Interface 0.013001;
 ###########################################################################
 
 { package Muldis::Rosetta::Validator; # module
-    use version 0.74; our $VERSION = qv('0.13.1');
+    use version 0.74; our $VERSION = qv('0.13.2');
 
     use Test::More;
-    use Test::Moose 0.65;
+    use Test::Moose 0.68;
+
+    use namespace::clean;
 
 ###########################################################################
 
@@ -36,7 +38,7 @@ sub main {
     });
     does_ok( $process, 'Muldis::Rosetta::Interface::Process' );
     $process->update_hd_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.58.0', 'HDMD_Perl5_Tiny', {} ] });
+        'http://muldis.com', '0.59.1', 'HDMD_Perl5_Tiny', {} ] });
 
     _scenario_foods_suppliers_shipments_v1( $process );
 
@@ -182,7 +184,7 @@ A common comprehensive test suite to run against all Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Validator version 0.13.1 for Perl
+This document describes Muldis::Rosetta::Validator version 0.13.2 for Perl
 5.
 
 =head1 SYNOPSIS
@@ -271,10 +273,11 @@ installation by users of earlier Perl versions:
 L<version-ver(0.74..*)|version>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<Test::Moose-ver(0.65..*)|Test::Moose>.
+L<namespace::clean-ver(0.09..*)|namespace::clean>,
+L<Test::Moose-ver(0.68..*)|Test::Moose>.
 
 It also requires these Perl 5 classes that are in the current distribution:
-L<Muldis::Rosetta::Interface-ver(0.13.1..*)|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface-ver(0.13.2..*)|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 
@@ -298,7 +301,7 @@ Darren Duncan (C<perl@DarrenDuncan.net>)
 
 This file is part of the Muldis Rosetta framework.
 
-Muldis Rosetta is Copyright © 2002-2009, Darren Duncan.
+Muldis Rosetta is Copyright © 2002-2009, Muldis Data Systems, Inc.
 
 See the LICENSE AND COPYRIGHT of L<Muldis::Rosetta> for details.
 
