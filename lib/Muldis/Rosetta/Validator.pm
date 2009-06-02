@@ -3,16 +3,16 @@ use utf8;
 use strict;
 use warnings FATAL => 'all';
 
-use Muldis::Rosetta::Interface 0.013001;
+use Muldis::Rosetta::Interface 0.013003;
 
 ###########################################################################
 ###########################################################################
 
 { package Muldis::Rosetta::Validator; # module
-    use version 0.74; our $VERSION = qv('0.13.2');
+    use version 0.74; our $VERSION = qv('0.13.3');
 
     use Test::More;
-    use Test::Moose 0.68;
+    use Test::Moose 0.79;
 
     use namespace::clean;
 
@@ -38,7 +38,7 @@ sub main {
     });
     does_ok( $process, 'Muldis::Rosetta::Interface::Process' );
     $process->update_hd_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.59.1', 'HDMD_Perl5_Tiny', {} ] });
+        'http://muldis.com', '0.75.0', 'HDMD_Perl5_STD' ] });
 
     _scenario_foods_suppliers_shipments_v1( $process );
 
@@ -56,65 +56,37 @@ sub _scenario_foods_suppliers_shipments_v1 {
     # Declare our example literal source data sets.
 
     my $src_suppliers = $process->new_value({
-        'source_code' => [ 'Relation', [ [ 'farm', 'country' ], [
-            [ [ 'Text', 'Hodgesons' ], [ 'Text', 'Canada'  ] ],
-            [ [ 'Text', 'Beckers'   ], [ 'Text', 'England' ] ],
-            [ [ 'Text', 'Wickets'   ], [ 'Text', 'Canada'  ] ],
+        'source_code' => [ 'Relation', [ [ 'farm', 'country' ] => [
+            [ 'Hodgesons', 'Canada'  ],
+            [ 'Beckers'  , 'England' ],
+            [ 'Wickets'  , 'Canada'  ],
         ] ] ],
     });
     pass( 'no death from loading example suppliers data into VM' );
     does_ok( $src_suppliers, 'Muldis::Rosetta::Interface::Value' );
 
     my $src_foods = $process->new_value({
-        'source_code' => [ 'Relation', [ [ 'food', 'colour' ], [
-            [ [ 'Text', 'Bananas' ], [ 'Text', 'yellow' ] ],
-            [ [ 'Text', 'Carrots' ], [ 'Text', 'orange' ] ],
-            [ [ 'Text', 'Oranges' ], [ 'Text', 'orange' ] ],
-            [ [ 'Text', 'Kiwis'   ], [ 'Text', 'green'  ] ],
-            [ [ 'Text', 'Lemons'  ], [ 'Text', 'yellow' ] ],
+        'source_code' => [ 'Relation', [ [ 'food', 'colour' ] => [
+            [ 'Bananas', 'yellow' ],
+            [ 'Carrots', 'orange' ],
+            [ 'Oranges', 'orange' ],
+            [ 'Kiwis'  , 'green'  ],
+            [ 'Lemons' , 'yellow' ],
         ] ] ],
     });
     pass( 'no death from loading example foods data into VM' );
     does_ok( $src_foods, 'Muldis::Rosetta::Interface::Value' );
 
     my $src_shipments = $process->new_value({
-        'source_code' => [ 'Relation', [
-            {
-                'farm' => [ 'Text', 'Hodgesons' ],
-                'food' => [ 'Text', 'Kiwis' ],
-                'qty'  => [ 'Int', 100 ],
-            },
-            {
-                'farm' => [ 'Text', 'Hodgesons' ],
-                'food' => [ 'Text', 'Lemons' ],
-                'qty'  => [ 'Int', 130 ],
-            },
-            {
-                'farm' => [ 'Text', 'Hodgesons' ],
-                'food' => [ 'Text', 'Oranges' ],
-                'qty'  => [ 'Int', 10 ],
-            },
-            {
-                'farm' => [ 'Text', 'Hodgesons' ],
-                'food' => [ 'Text', 'Carrots' ],
-                'qty'  => [ 'Int', 50 ],
-            },
-            {
-                'farm' => [ 'Text', 'Beckers' ],
-                'food' => [ 'Text', 'Carrots' ],
-                'qty'  => [ 'Int', 90 ],
-            },
-            {
-                'farm' => [ 'Text', 'Beckers' ],
-                'food' => [ 'Text', 'Bananas' ],
-                'qty'  => [ 'Int', 120 ],
-            },
-            {
-                'farm' => [ 'Text', 'Wickets' ],
-                'food' => [ 'Text', 'Lemons' ],
-                'qty'  => [ 'Int', 30 ],
-            },
-        ] ],
+        'source_code' => [ 'Relation', [ [ 'farm', 'food', 'qty' ] => [
+            [ 'Hodgesons', 'Kiwis'  , 100 ],
+            [ 'Hodgesons', 'Lemons' , 130 ],
+            [ 'Hodgesons', 'Oranges',  10 ],
+            [ 'Hodgesons', 'Carrots',  50 ],
+            [ 'Beckers'  , 'Carrots',  90 ],
+            [ 'Beckers'  , 'Bananas', 120 ],
+            [ 'Wickets'  , 'Lemons' ,  30 ],
+        ] ] ],
     });
     pass( 'no death from loading example shipments data into VM' );
     does_ok( $src_shipments, 'Muldis::Rosetta::Interface::Value' );
@@ -128,11 +100,11 @@ sub _scenario_foods_suppliers_shipments_v1 {
     does_ok( $desi_colour, 'Muldis::Rosetta::Interface::Value' );
 
     my $matched_suppl = $process->func_invo({
-        'function' => 'sys.std.Core.QRelation.semijoin',
+        'function' => 'semijoin',
         'args' => {
             'source' => $src_suppliers,
             'filter' => $process->func_invo({
-                'function' => 'sys.std.Core.QRelation.join',
+                'function' => 'join',
                 'args' => {
                     'topic' => [ 'QSet', [
                         $src_shipments,
@@ -151,9 +123,9 @@ sub _scenario_foods_suppliers_shipments_v1 {
 
     # Finally, use the result somehow (not done here).
     # The result should be:
-    # [ 'Relation', [ [ 'farm', 'country' ], [
-    #     [ [ 'Text', 'Hodgesons' ], [ 'Text', 'Canada'  ] ],
-    #     [ [ 'Text', 'Beckers'   ], [ 'Text', 'England' ] ],
+    # [ 'Relation', [ [ 'farm', 'country' ] => [
+    #     [ 'Hodgesons', 'Canada'  ],
+    #     [ 'Beckers'  , 'England' ],
     # ] ] ],
 
     print "# debug: orange food suppliers found:\n";
@@ -184,7 +156,7 @@ A common comprehensive test suite to run against all Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Validator version 0.13.2 for Perl
+This document describes Muldis::Rosetta::Validator version 0.13.3 for Perl
 5.
 
 =head1 SYNOPSIS
@@ -273,11 +245,12 @@ installation by users of earlier Perl versions:
 L<version-ver(0.74..*)|version>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<namespace::clean-ver(0.09..*)|namespace::clean>,
-L<Test::Moose-ver(0.68..*)|Test::Moose>.
+L<namespace::clean-ver(0.11..*)|namespace::clean>,
+L<Test::Moose-ver(0.79..*)|Test::Moose>.
 
-It also requires these Perl 5 classes that are in the current distribution:
-L<Muldis::Rosetta::Interface-ver(0.13.2..*)|Muldis::Rosetta::Interface>.
+It also requires these Perl 5 packages that are in the current
+distribution:
+L<Muldis::Rosetta::Interface-ver(0.13.3..*)|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 

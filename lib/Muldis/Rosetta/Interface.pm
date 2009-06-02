@@ -7,7 +7,7 @@ use warnings FATAL => 'all';
 ###########################################################################
 
 { package Muldis::Rosetta::Interface; # module
-    use version 0.74; our $VERSION = qv('0.13.2');
+    use version 0.74; our $VERSION = qv('0.13.3');
     # Note: This given version applies to all of this file's packages.
 
     use Carp;
@@ -74,7 +74,7 @@ sub new_machine {
 
 { package Muldis::Rosetta::Interface::Machine; # role
 
-    use Moose::Role 0.68;
+    use Moose::Role 0.79;
 
     use namespace::clean -except => 'meta';
 
@@ -87,7 +87,7 @@ sub new_machine {
 
 { package Muldis::Rosetta::Interface::Process; # role
 
-    use Moose::Role 0.68;
+    use Moose::Role 0.79;
 
     use namespace::clean -except => 'meta';
 
@@ -113,7 +113,7 @@ sub new_machine {
 
 { package Muldis::Rosetta::Interface::Value; # role
 
-    use Moose::Role 0.68;
+    use Moose::Role 0.79;
 
     use namespace::clean -except => 'meta';
 
@@ -140,7 +140,7 @@ Common public API for Muldis Rosetta Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Interface version 0.13.2 for Perl
+This document describes Muldis::Rosetta::Interface version 0.13.3 for Perl
 5.
 
 It also describes the same-number versions for Perl 5 of
@@ -160,25 +160,25 @@ producing a third Perl variable holding the relation data of the result.
         'engine_name' => 'Muldis::Rosetta::Engine::Example' });
     my $process = $machine->new_process();
     $process->update_hd_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.59.1', 'HDMD_Perl5_Tiny', {} ] });
+        'http://muldis.com', '0.75.0', 'HDMD_Perl5_STD' ] });
 
     my $r1 = $process->new_value({
-        'source_code' => [ 'Relation', [ [ 'x', 'y' ], [
-            [ [ 'Int', 4 ], [ 'Int', 7 ] ],
-            [ [ 'Int', 3 ], [ 'Int', 2 ] ],
+        'source_code' => [ 'Relation', [ [ 'x', 'y' ] => [
+            [ 4, 7 ],
+            [ 3, 2 ],
         ] ] ]
     });
 
     my $r2 = $process->new_value({
-        'source_code' => [ 'Relation', [ [ 'y', 'z' ], [
-            [ [ 'Int', 5 ], [ 'Int', 6 ] ],
-            [ [ 'Int', 2 ], [ 'Int', 1 ] ],
-            [ [ 'Int', 2 ], [ 'Int', 4 ] ],
+        'source_code' => [ 'Relation', [ [ 'y', 'z' ] => [
+            [ 5, 6 ],
+            [ 2, 1 ],
+            [ 2, 4 ],
         ] ] ]
     });
 
     my $r3 = $process->func_invo({
-        'function' => 'sys.std.Core.QRelation.join',
+        'function' => 'join',
         'args' => {
             'topic' => [ 'QSet', [ $r1, $r2 ] ],
         }
@@ -187,9 +187,9 @@ producing a third Perl variable holding the relation data of the result.
     my $r3_as_perl = $r3->hd_source_code();
 
     # Then $r3_as_perl contains:
-    # [ 'Relation', [ [ 'x', 'y', 'z' ], [
-    #     [ [ 'Int', 3 ], [ 'Int', 2 ], [ 'Int', 1 ] ],
-    #     [ [ 'Int', 3 ], [ 'Int', 2 ], [ 'Int', 4 ] ],
+    # [ 'Relation', [ [ 'x', 'y', 'z' ] => [
+    #     [ 3, 2, 1 ],
+    #     [ 3, 2, 4 ],
     # ] ] ]
 
 For most examples of using Muldis Rosetta, and tutorials, please see the
@@ -521,8 +521,8 @@ installation by users of earlier Perl versions:
 L<version-ver(0.74..*)|version>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<namespace::clean-ver(0.09..*)|namespace::clean>,
-L<Moose::Role-ver(0.68..*)|Moose::Role>.
+L<namespace::clean-ver(0.11..*)|namespace::clean>,
+L<Moose::Role-ver(0.79..*)|Moose::Role>.
 
 =head1 INCOMPATIBILITIES
 
