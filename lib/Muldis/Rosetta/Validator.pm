@@ -3,18 +3,19 @@ use utf8;
 use strict;
 use warnings FATAL => 'all';
 
-use Muldis::Rosetta::Interface 0.013003;
+use Muldis::Rosetta::Interface 0.014000;
 
 ###########################################################################
 ###########################################################################
 
 { package Muldis::Rosetta::Validator; # module
-    use version 0.74; our $VERSION = qv('0.13.3');
+    our $VERSION = '0.014000';
+    $VERSION = eval $VERSION;
 
-    use Test::More;
-    use Test::Moose 0.79;
+    use namespace::autoclean 0.08;
 
-    use namespace::clean;
+    use Test::More 0.92;
+    use Test::Moose 0.89;
 
 ###########################################################################
 
@@ -22,8 +23,6 @@ sub main {
     my ($args) = @_;
     my ($engine_name, $process_config)
         = @{$args}{'engine_name', 'process_config'};
-
-    plan( 'tests' => 13 );
 
     print "#### Muldis::Rosetta::Validator"
         . " starting test of $engine_name ####\n";
@@ -38,12 +37,14 @@ sub main {
     });
     does_ok( $process, 'Muldis::Rosetta::Interface::Process' );
     $process->update_hd_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.75.0', 'HDMD_Perl5_STD' ] });
+        'http://muldis.com', '0.85.0', 'HDMD_Perl5_STD' ] });
 
     _scenario_foods_suppliers_shipments_v1( $process );
 
     print "#### Muldis::Rosetta::Validator"
         . " finished test of $engine_name ####\n";
+
+    done_testing();
 
     return;
 }
@@ -106,7 +107,7 @@ sub _scenario_foods_suppliers_shipments_v1 {
             'filter' => $process->func_invo({
                 'function' => 'join',
                 'args' => {
-                    'topic' => [ 'QSet', [
+                    'topic' => [ 'Set', [
                         $src_shipments,
                         $src_foods,
                         [ 'Relation', [ { 'colour' => $desi_colour } ] ],
@@ -156,7 +157,7 @@ A common comprehensive test suite to run against all Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Validator version 0.13.3 for Perl
+This document describes Muldis::Rosetta::Validator version 0.14.0 for Perl
 5.
 
 =head1 SYNOPSIS
@@ -237,20 +238,20 @@ I<This documentation is pending.>
 =head1 DEPENDENCIES
 
 This file requires any version of Perl 5.x.y that is at least 5.8.1, and
-recommends one that is at least 5.10.0.
+recommends one that is at least 5.10.1.
 
 It also requires these Perl 5 packages that are bundled with any version of
-Perl 5.x.y that is at least 5.10.0, and are also on CPAN for separate
+Perl 5.x.y that is at least 5.10.1, and are also on CPAN for separate
 installation by users of earlier Perl versions:
-L<version-ver(0.74..*)|version>.
+L<Test::More-ver(0.92..*)|Test::More>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<namespace::clean-ver(0.11..*)|namespace::clean>,
-L<Test::Moose-ver(0.79..*)|Test::Moose>.
+L<namespace::autoclean-ver(0.08..*)|namespace::autoclean>,
+L<Test::Moose-ver(0.89..*)|Test::Moose>.
 
 It also requires these Perl 5 packages that are in the current
 distribution:
-L<Muldis::Rosetta::Interface-ver(0.13.3..*)|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface-ver(0.14.0..*)|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 
