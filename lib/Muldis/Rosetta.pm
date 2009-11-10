@@ -2,21 +2,12 @@ use 5.008001;
 use utf8;
 use strict;
 use warnings FATAL => 'all';
-
-###########################################################################
-###########################################################################
-
-{ package Muldis::Rosetta; # package
-    our $VERSION = '0.014000';
-    $VERSION = eval $VERSION;
-    # Note that Perl code only exists at all in this file in order to help
-    # the CPAN indexer handle the distribution properly.
-} # package Muldis::Rosetta
-
-###########################################################################
-###########################################################################
-
-1; # Magic true value required at end of a reusable file's code.
+package Muldis::Rosetta;
+our $VERSION = '0.014000';
+$VERSION = eval $VERSION;
+# Note that Perl code only exists at all in this file in order to help
+# the CPAN indexer handle the distribution properly.
+1;
 __END__
 
 =pod
@@ -30,7 +21,7 @@ Full-featured truly relational DBMS in Perl
 
 =head1 VERSION
 
-This document is Muldis::Rosetta version 0.14.0.
+This document is Muldis::Rosetta version 0.15.0.
 
 =head1 DESCRIPTION
 
@@ -254,7 +245,7 @@ references.
 
 =head1 AUTHOR
 
-Darren Duncan (C<perl@DarrenDuncan.net>)
+Darren Duncan (C<darren@DarrenDuncan.net>)
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -381,6 +372,6 @@ intended, but not yet started.
 
 Alternately, you can purchase more advanced commercial support for various
 Muldis D implementations, particularly Muldis Rosetta, from its author by
-way of Muldis Data Systems; see (L<http://www.muldis.com/>) for details.
+way of Muldis Data Systems; see L<http://www.muldis.com/> for details.
 
 =cut
