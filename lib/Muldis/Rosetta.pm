@@ -3,7 +3,7 @@ use utf8;
 use strict;
 use warnings FATAL => 'all';
 package Muldis::Rosetta;
-our $VERSION = '0.014000';
+our $VERSION = '0.016000';
 $VERSION = eval $VERSION;
 # Note that Perl code only exists at all in this file in order to help
 # the CPAN indexer handle the distribution properly.
@@ -21,7 +21,7 @@ Full-featured truly relational DBMS in Perl
 
 =head1 VERSION
 
-This document is Muldis::Rosetta version 0.15.0.
+This document is Muldis::Rosetta version 0.16.0.
 
 =head1 DESCRIPTION
 
@@ -251,7 +251,7 @@ Darren Duncan (C<darren@DarrenDuncan.net>)
 
 This file is part of the Muldis Rosetta framework.
 
-Muldis Rosetta is Copyright © 2002-2009, Muldis Data Systems, Inc.
+Muldis Rosetta is Copyright © 2002-2010, Muldis Data Systems, Inc.
 
 L<http://www.muldis.com/>
 

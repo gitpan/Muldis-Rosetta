@@ -7,7 +7,7 @@ use warnings FATAL => 'all';
 ###########################################################################
 
 { package Muldis::Rosetta::Interface; # package
-    our $VERSION = '0.014000';
+    our $VERSION = '0.016000';
     $VERSION = eval $VERSION;
     # Note: This given version applies to all of this file's packages.
 } # package Muldis::Rosetta::Interface
@@ -19,7 +19,7 @@ use warnings FATAL => 'all';
 
     use namespace::autoclean 0.09;
 
-    use Moose::Role 0.92;
+    use Moose::Role 0.98;
 
     requires 'new_process';
 
@@ -32,7 +32,7 @@ use warnings FATAL => 'all';
 
     use namespace::autoclean 0.09;
 
-    use Moose::Role 0.92;
+    use Moose::Role 0.98;
 
     requires 'assoc_machine';
     requires 'pt_command_lang';
@@ -58,7 +58,7 @@ use warnings FATAL => 'all';
 
     use namespace::autoclean 0.09;
 
-    use Moose::Role 0.92;
+    use Moose::Role 0.98;
 
     requires 'assoc_process';
     requires 'pt_source_code';
@@ -83,7 +83,7 @@ Common public API for Muldis Rosetta Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Interface version 0.15.0 for Perl
+This document describes Muldis::Rosetta::Interface version 0.16.0 for Perl
 5.
 
 It also describes the same-number versions for Perl 5 of
@@ -98,11 +98,13 @@ then does a (N-adic) relational join (natural inner join) on them,
 producing a third Perl variable holding the relation data of the result.
 
     use Muldis::Rosetta::Engine::Example;
-    my $machine = Muldis::Rosetta::Engine::Example::new_machine();
+    my $machine = Muldis::Rosetta::Engine::Example::select_machine();
 
     my $process = $machine->new_process();
     $process->update_hd_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.99.0', 'HDMD_Perl5_STD' ] });
+        'http://muldis.com', '0.110.0', 'HDMD_Perl5_STD',
+        { catalog_abstraction_level => 'rtn_inv_alt_syn',
+        op_char_repertoire => 'extended' } ] });
 
     my $r1 = $process->new_value({
         'source_code' => [ 'Relation', [ [ 'x', 'y' ] => [
@@ -140,7 +142,7 @@ application, then these next 2 lines can be used instead of the first 2
 lines above, assuming the Class::MOP module is already loaded:
 
     Class::MOP::load_class( $engine_name );
-    my $machine = &{$engine_name->can( 'new_machine' )}();
+    my $machine = &{$engine_name->can( 'select_machine' )}();
 
 For most examples of using Muldis Rosetta, and tutorials, please see the
 separate L<Muldis::D::Manual>.
@@ -169,9 +171,9 @@ constructor-wrapping method of some other object that would provide context
 for it; since you generally don't have to directly invoke any package
 names, you don't need to change your code when the package names change due
 to switching the Engine.  You only refer to some Engine's root package name
-once, as the namespace on which you invoke the C<new_machine> constructor
-function, and even that can be read from a config file rather than being
-hard-coded in your application.
+once, as the namespace on which you invoke the C<select_machine>
+constructor function, and even that can be read from a config file rather
+than being hard-coded in your application.
 
 The usual way that Muldis::Rosetta::Interface indicates a failure is to
 throw an exception; most often this is due to invalid input.  If an invoked
@@ -196,11 +198,11 @@ them living in child namespaces of the Engine root package, for example
 C<Muldis::Rosetta::Engine::Example::Public::Machine>.
 
 The root package of a Muldis Rosetta Engine is expected to declare a
-C<new_machine> constructor function, as described next.
+C<select_machine> constructor function, as described next.
 
-=head2 new_machine
+=head2 select_machine
 
-C<sub new_machine of Muldis::Rosetta::Interface::Machine ()>
+C<sub select_machine of Muldis::Rosetta::Interface::Machine ()>
 
 This constructor function selects (first creating if necessary) and returns
 the singleton C<Machine> object that is implemented by the Muldis Rosetta
@@ -367,7 +369,7 @@ been updated to hold a different C<Value> object as a side-effect.
 C<method proc_invo ($self: Str :$procedure!, Hash :$upd_args?,
 Hash :$ro_args?, Str :$pt_lang?, Array :$hd_lang?)>
 
-This method invokes the Muldis D procedure (or system-service)
+This method invokes the Muldis D procedure
 named by its C<$procedure> argument, giving it
 subject-to-update arguments from C<$upd_args> and read-only arguments from
 C<$ro_args>; the C<Value> objects in C<$upd_args> are possibly substituted
@@ -387,9 +389,8 @@ auto-committing every successful Muldis D statement.  Each call of
 C<start_trans> will increase the nesting level by one, and each
 C<commit_trans> or C<rollback_trans> will decrease it by one (it can't be
 decreased below zero).  Note that all transactions started or ended within
-Muldis D code (except direct boot_stmt transaction management) are attached
-to a particular lexical scope in the Muldis D code (specifically a
-"try/catch" context), and so they will never have any effect on the nest
+Muldis D code are attached to a particular lexical scope in the Muldis D
+code, and so they will never have any effect on the nest
 level that Perl sees (assuming that a Muldis D host language will never be
 invoked by Muldis D), regardless of whether the Muldis D code successfully
 returns or throws an exception.
@@ -473,7 +474,7 @@ recommends one that is at least 5.10.1.
 
 It also requires these Perl 5 packages that are on CPAN:
 L<namespace::autoclean-ver(0.09..*)|namespace::autoclean>,
-L<Moose::Role-ver(0.92..*)|Moose::Role>.
+L<Moose::Role-ver(0.98..*)|Moose::Role>.
 
 =head1 INCOMPATIBILITIES
 
@@ -504,7 +505,7 @@ Darren Duncan (C<darren@DarrenDuncan.net>)
 
 This file is part of the Muldis Rosetta framework.
 
-Muldis Rosetta is Copyright © 2002-2009, Muldis Data Systems, Inc.
+Muldis Rosetta is Copyright © 2002-2010, Muldis Data Systems, Inc.
 
 See the LICENSE AND COPYRIGHT of L<Muldis::Rosetta> for details.
 

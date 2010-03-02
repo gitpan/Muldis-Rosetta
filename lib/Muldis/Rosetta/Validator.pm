@@ -3,22 +3,22 @@ use utf8;
 use strict;
 use warnings FATAL => 'all';
 
-use Class::MOP 0.94;
-use Muldis::Rosetta::Interface 0.014000;
+use Class::MOP 0.98;
+use Muldis::Rosetta::Interface 0.016000;
 
 ###########################################################################
 ###########################################################################
 
 { package Muldis::Rosetta::Validator; # module
-    our $VERSION = '0.014000';
+    our $VERSION = '0.016000';
     $VERSION = eval $VERSION;
 
     use namespace::autoclean 0.09;
 
-    use Try::Tiny 0.02;
+    use Try::Tiny 0.04;
 
     use Test::More 0.92;
-    use Test::Moose 0.92;
+    use Test::Moose 0.98;
 
 ###########################################################################
 
@@ -54,17 +54,17 @@ sub main {
             . q{ errors, it did not declare the same-named module.} );
         return;
     }
-    if (!$engine_name->can( 'new_machine' )) {
+    if (!$engine_name->can( 'select_machine' )) {
         BAIL_OUT( q{Muldis::Rosetta::Validator:}
             . q{ The Muldis Rosetta Engine module '$engine_name' does not}
-            . q{ provide the new_machine() constructor function.} );
+            . q{ provide the select_machine() constructor function.} );
         return;
     }
-    diag( "$engine_name loads and declares new_machine() constructor." );
-    pass( 'Engine module loads and declares new_machine() constructor' );
+    diag( "$engine_name loads + declares select_machine() constructor." );
+    pass( 'Engine module loads + declares select_machine() constructor' );
 
     # Instantiate a Muldis Rosetta DBMS / virtual machine.
-    my $machine = &{$engine_name->can( 'new_machine' )}();
+    my $machine = &{$engine_name->can( 'select_machine' )}();
     pass( 'no death from instantiating new/singleton virtual machine' );
     does_ok( $machine, 'Muldis::Rosetta::Interface::Machine' );
     my $process = $machine->new_process({
@@ -73,7 +73,9 @@ sub main {
     pass( 'no death from instantiating new VM process' );
     does_ok( $process, 'Muldis::Rosetta::Interface::Process' );
     $process->update_hd_command_lang({ 'lang' => [ 'Muldis_D',
-        'http://muldis.com', '0.99.0', 'HDMD_Perl5_STD' ] });
+        'http://muldis.com', '0.110.0', 'HDMD_Perl5_STD',
+        { catalog_abstraction_level => 'rtn_inv_alt_syn',
+        op_char_repertoire => 'extended' } ] });
 
     _scenario_foods_suppliers_shipments_v1( $process );
 
@@ -192,7 +194,7 @@ A common comprehensive test suite to run against all Engines
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Validator version 0.15.0 for Perl
+This document describes Muldis::Rosetta::Validator version 0.16.0 for Perl
 5.
 
 =head1 SYNOPSIS
@@ -282,12 +284,12 @@ L<Test::More-ver(0.92..*)|Test::More>.
 
 It also requires these Perl 5 packages that are on CPAN:
 L<namespace::autoclean-ver(0.09..*)|namespace::autoclean>,
-L<Try::Tiny-ver(0.02..*)|Try::Tiny>, L<Class::MOP-ver(0.94..*)|Class::MOP>,
-L<Test::Moose-ver(0.92..*)|Test::Moose>.
+L<Try::Tiny-ver(0.04..*)|Try::Tiny>, L<Class::MOP-ver(0.98..*)|Class::MOP>,
+L<Test::Moose-ver(0.98..*)|Test::Moose>.
 
 It also requires these Perl 5 packages that are in the current
 distribution:
-L<Muldis::Rosetta::Interface-ver(0.15.0..*)|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface-ver(0.16.0..*)|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 
@@ -311,7 +313,7 @@ Darren Duncan (C<darren@DarrenDuncan.net>)
 
 This file is part of the Muldis Rosetta framework.
 
-Muldis Rosetta is Copyright © 2002-2009, Muldis Data Systems, Inc.
+Muldis Rosetta is Copyright © 2002-2010, Muldis Data Systems, Inc.
 
 See the LICENSE AND COPYRIGHT of L<Muldis::Rosetta> for details.
 

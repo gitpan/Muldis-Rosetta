@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Muldis-Rosetta
-version:            0.15.0
+version:            0.16.0
 abstract:           Full-featured truly relational DBMS in Perl
 author:
     - Darren Duncan <darren@DarrenDuncan.net>
@@ -13,15 +13,15 @@ build_requires:
     ExtUtils::MakeMaker:  6.48
     Test::More:           0.92
 requires:
-    Class::MOP:           0.94
-    Moose:                0.92
-    Moose::Role:          0.92
-    MooseX::Singleton:    0.21
+    Class::MOP:           0.98
+    Moose:                0.98
+    Moose::Role:          0.98
+    MooseX::Singleton:    0.22
     namespace::autoclean:  0.09
     perl:                 5.008001
-    Test::Moose:          0.92
+    Test::Moose:          0.98
     Test::More:           0.92
-    Try::Tiny:            0.02
+    Try::Tiny:            0.04
 resources:
     homepage:     http://www.muldis.com/
     license:      http://www.fsf.org/licensing/licenses/lgpl.html

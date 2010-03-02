@@ -3,21 +3,21 @@ use utf8;
 use strict;
 use warnings FATAL => 'all';
 
-use Muldis::Rosetta::Interface 0.014000;
+use Muldis::Rosetta::Interface 0.016000;
 
-#use Muldis::Rosetta::Engine::Example::Value 0.014000;
-#use Muldis::Rosetta::Engine::Example::Routines 0.014000;
-#use Muldis::Rosetta::Engine::Example::Storage 0.014000;
-#use Muldis::Rosetta::Engine::Example::Runtime 0.014000;
-#use Muldis::Rosetta::Engine::Example::Util 0.014000;
-#use Muldis::Rosetta::Engine::Example::PlainText 0.014000;
-#use Muldis::Rosetta::Engine::Example::HostedData 0.014000;
+#use Muldis::Rosetta::Engine::Example::Value 0.016000;
+#use Muldis::Rosetta::Engine::Example::Routines 0.016000;
+#use Muldis::Rosetta::Engine::Example::Storage 0.016000;
+#use Muldis::Rosetta::Engine::Example::Runtime 0.016000;
+#use Muldis::Rosetta::Engine::Example::Util 0.016000;
+#use Muldis::Rosetta::Engine::Example::PlainText 0.016000;
+#use Muldis::Rosetta::Engine::Example::HostedData 0.016000;
 
 ###########################################################################
 ###########################################################################
 
 { package Muldis::Rosetta::Engine::Example; # module
-    our $VERSION = '0.014000';
+    our $VERSION = '0.016000';
     $VERSION = eval $VERSION;
     # Note: This given version applies to all of this file's packages.
 
@@ -25,8 +25,8 @@ use Muldis::Rosetta::Interface 0.014000;
 
 ###########################################################################
 
-sub new_machine {
-    return Muldis::Rosetta::Engine::Example::Public::Machine->new();
+sub select_machine {
+    return Muldis::Rosetta::Engine::Example::Public::Machine->instance();
 }
 
 ###########################################################################
@@ -40,8 +40,8 @@ sub new_machine {
 
     use namespace::autoclean 0.09;
 
-    use Moose 0.92;
-    use MooseX::Singleton 0.21;
+    use Moose 0.98;
+    use MooseX::Singleton 0.22;
 
     with 'Muldis::Rosetta::Interface::Machine';
 
@@ -75,7 +75,7 @@ sub new_process {
 
     use namespace::autoclean 0.09;
 
-    use Moose 0.92;
+    use Moose 0.98;
 
     has 'assoc_machine' => (
         is       => 'ro',
@@ -246,7 +246,7 @@ sub proc_invo {
 
     use namespace::autoclean 0.09;
 
-    use Moose 0.92;
+    use Moose 0.98;
 
     has 'assoc_process' => (
         is       => 'ro',
@@ -350,7 +350,7 @@ Self-contained reference implementation of a Muldis Rosetta Engine
 
 =head1 VERSION
 
-This document describes Muldis::Rosetta::Engine::Example version 0.15.0 for
+This document describes Muldis::Rosetta::Engine::Example version 0.16.0 for
 Perl 5.
 
 It also describes the same-number versions for Perl 5 of
@@ -477,16 +477,18 @@ Example written in any of the following:
 See L<Muldis::D::Dialect::PTMD_STD> for details.
 
 The language name is specified as a Perl character string whose value is
-C<Muldis_D:"http://muldis.com":"0.99.0":PTMD_STD>.  No other version
-numbers are currently supported.
+C<Muldis_D:"http://muldis.com":0.110.0:PTMD_STD:{...}>.  No other version
+numbers are currently supported.  All options defined by B<PTMD_STD> for
+its C<ln_extensions> 5th name element are supported.
 
 =item B<Tiny Perl Hosted Data Muldis D>
 
 See L<Muldis::D::Dialect::HDMD_Perl5_STD> for details.
 
-The language name is specified either as a Perl array whose value is C<[
-'Muldis_D', 'http://muldis.com', '0.99.0', 'HDMD_Perl5_STD' ]>.  No other
-version numbers are currently supported.
+The language name is specified as a Perl array whose value is C<[
+'Muldis_D', 'http://muldis.com', '0.110.0', 'HDMD_Perl5_STD', {...} ]>.  No
+other version numbers are currently supported.  All options defined by
+B<HDMD_Perl5_STD> for its C<ln_extensions> 5th name element are supported.
 
 =back
 
@@ -509,12 +511,12 @@ recommends one that is at least 5.10.1.
 
 It also requires these Perl 5 packages that are on CPAN:
 L<namespace::autoclean-ver(0.09..*)|namespace::autoclean>,
-L<Moose-ver(0.92..*)|Moose>, L<Moose::Role-ver(0.92..*)|Moose::Role>,
-L<MooseX::Singleton-ver(0.21..*)|MooseX::Singleton>.
+L<Moose-ver(0.98..*)|Moose>, L<Moose::Role-ver(0.98..*)|Moose::Role>,
+L<MooseX::Singleton-ver(0.22..*)|MooseX::Singleton>.
 
 It also requires these Perl 5 packages that are in the current
 distribution:
-L<Muldis::Rosetta::Interface-ver(0.15.0..*)|Muldis::Rosetta::Interface>.
+L<Muldis::Rosetta::Interface-ver(0.16.0..*)|Muldis::Rosetta::Interface>.
 
 =head1 INCOMPATIBILITIES
 
@@ -560,7 +562,7 @@ Darren Duncan (C<darren@DarrenDuncan.net>)
 
 This file is part of the Muldis Rosetta framework.
 
-Muldis Rosetta is Copyright © 2002-2009, Muldis Data Systems, Inc.
+Muldis Rosetta is Copyright © 2002-2010, Muldis Data Systems, Inc.
 
 See the LICENSE AND COPYRIGHT of L<Muldis::Rosetta> for details.
 
